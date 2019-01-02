@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SwipeRefreshRecyclerView">
+        <attr name="srrvLoadMoreLayout" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="PullToRefreshRecyclerView">
+        <attr name="prvHeaderLayout" format="reference"/>
+        <attr name="prvFooterLayout" format="reference"/>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jsc.kit.recycler.SwipeRefreshRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_refresh_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:srrvLoadMoreLayout="@layout/recycler_default_load_more_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+</jsc.kit.recycler.SwipeRefreshRecyclerView>
