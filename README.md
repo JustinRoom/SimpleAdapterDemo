@@ -35,7 +35,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 
 ### 3、usage
 
-+ 1、示例：
++ 3.1、示例：
 ```
         RecyclerView recyclerView;
 
@@ -95,7 +95,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
         adapter2.bindRecyclerView(recyclerView);
         adapter2.addHeader(new MaterielOrderDetail());
 ```
-+ 2、[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)
++ 3.2、[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)
 
 > 头部header  
 设置header视图布局文件`public void setHeaderLayoutId(@LayoutRes int layoutId)`。  
@@ -131,7 +131,63 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 `void setTag(@IdRes int id, final Object tag)`
 `void setTag(@IdRes int id, int key, final Object tag)`
 
-+ 3、SimpleAdapter
++ 3.3、各种事件监听
+`itemView`的点击事件监听：
+```
+public interface OnItemClickListener<H, D, F, E> {
+    //每一条header的点击监听
+    void onHeaderItemClick(@NonNull View headerItemView, int position, H headerBean);
+    //每一条data的点击监听
+    void onDataItemClick(@NonNull View dataItemView, int position, D dataBean);
+    //每一条footer的点击监听
+    void onFooterItemClick(@NonNull View footerItemView, int position, F footerBean);
+    //每一条empty的点击监听
+    void onEmptyItemClick(@NonNull View emptyItemView, int position, E emptyBean);
+}
+```
+
+`itemView`之`child view`的点击事件监听
+```
+public interface OnItemChildClickListener<H, D, F, E> {
+    //header child view点击监听
+    void onHeaderItemChildClick(@NonNull View headerChild, int position, H headerBean);
+    //data child view点击监听
+    void onDataItemChildClick(@NonNull View dataItemChild, int position, D dataBean);
+    //footer child view点击监听
+    void onFooterItemChildClick(@NonNull View footerChild, int position, F footerBean);
+    //empty child view点击监听
+    void onEmptyItemChildClick(@NonNull View emptyChild, int position, E emptyBean);
+}
+```
+
+`itemView`的长按事件监听：
+```
+public interface OnItemLongClickListener<H, D, F, E> {
+    //每一条header的长按监听
+    boolean onHeaderItemLongClick(@NonNull View headerItemView, int position, H headerBean);
+    //每一条data的长按监听
+    boolean onDataItemLongClick(@NonNull View dataItemView, int position, D dataBean);
+    //每一条footer的长按监听
+    boolean onFooterItemLongClick(@NonNull View footerItemView, int position, F footerBean);
+    //每一条empty的长按监听
+    boolean onEmptyItemLongClick(@NonNull View emptyItemView, int position, E emptyBean);
+}
+```
+
+`itemView`之`child view`的长按事件监听
+```
+public interface OnItemChildLongClickListener<H, D, F, E> {
+    //header child view长按监听
+    boolean onHeaderItemChildLongClick(@NonNull View headerChild, int position, H headerBean);
+    //data child view长按监听
+    boolean onDataItemChildLongClick(@NonNull View dataItemChild, int position, D dataBean);
+    //footer child view长按监听
+    boolean onFooterItemChildLongClick(@NonNull View footerChild, int position, F footerBean);
+    //empty child view长按监听
+    boolean onEmptyItemChildLongClick(@NonNull View emptyChild, int position, E emptyBean);
+}
+
+```
 
 
 ### 4、Screenshots
