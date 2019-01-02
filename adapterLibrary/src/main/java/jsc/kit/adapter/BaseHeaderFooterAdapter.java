@@ -54,7 +54,6 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     public @interface ViewType {
     }
 
-    private RecyclerView recyclerView = null;
     private int headerLayoutId = -1;
     private int dataLayoutId = -1;
     private int footerLayoutId = -1;
@@ -192,7 +191,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     }
 
     public BaseHeaderFooterAdapter(int dataLayoutId) {
-        this.dataLayoutId = dataLayoutId;
+        setDataLayoutId(dataLayoutId);
     }
 
 
@@ -280,6 +279,13 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
     }
 
+    public void clearData() {
+        if (!data.isEmpty()) {
+            data.clear();
+            notifyDataSetChanged();
+        }
+    }
+
     //footer
 
     public List<F> getFooters() {
@@ -292,7 +298,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
 
     @Nullable
     public F getFooterAt(int position) {
-        int index = position - getHeaderSize() - getDataSize();
+        int index = position - getHeaderSize() - getInternalSize();
         if (index < 0 || index >= getFooterSize())
             return null;
         return footers.get(index);
@@ -386,31 +392,28 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     }
 
     public final void bindRecyclerView(@NonNull RecyclerView recyclerView) {
-        if (this.recyclerView != null)
-            throw new IllegalStateException("This adapter is already bounded.");
-        this.recyclerView = recyclerView;
-        this.recyclerView.setAdapter(this);
+        recyclerView.setAdapter(this);
     }
 
     private boolean isEmptyData() {
         return getData().isEmpty();
     }
 
-    private int getDataOrEmptySize() {
+    private int getInternalSize() {
         return isEmptyData() ? getEmptySize() : getDataSize();
     }
 
     @Override
     public int getItemCount() {
-        return getHeaderSize() + getDataOrEmptySize() + getFooterSize();
+        return getHeaderSize() + getInternalSize() + getFooterSize();
     }
 
     @ViewType
     @Override
     public int getItemViewType(int position) {
-        if (position >= getHeaderSize() + getDataOrEmptySize() + getFooterSize())
+        if (position >= getHeaderSize() + getInternalSize() + getFooterSize())
             return UNKNOWN;
-        if (position >= getHeaderSize() + getDataOrEmptySize())
+        if (position >= getHeaderSize() + getInternalSize())
             return TYPE_FOOTER;
         if (position >= getHeaderSize())
             return isEmptyData() ? TYPE_EMPTY : TYPE_DATA;

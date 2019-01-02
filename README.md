@@ -95,7 +95,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
         adapter2.bindRecyclerView(recyclerView);
         adapter2.addHeader(new MaterielOrderDetail());
 ```
-+ 2、BaseHeaderFooterAdapter
++ 2、[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)
 
 > 头部header  
 设置header视图布局文件`public void setHeaderLayoutId(@LayoutRes int layoutId)`。  
@@ -113,7 +113,25 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 设置empty视图布局文件`public void setEmptyLayoutId(@LayoutRes int layoutId)`。  
 绑定数据到empty视图`protected void onBindEmptyViewHolder(@NonNull VH holder, int position, E emptyBean) {}`。
 
+> 给child view添加点击事件:`addOnChildClickListener(@NonNull VH holder, @IdRes int id)`。  
+给child view添加长按事件:`addOnChildLongClickListener(@NonNull VH holder, @IdRes int id)`。
 
+[BaseViewHolder](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法：
+`<V extends View> V findViewById(@IdRes int id)`
+`void setText(@IdRes int id, CharSequence txt)`
+`void setTextColor(@IdRes int id, @ColorInt int color)`
+`void setTextSize(@IdRes int id, float size)`
+`void setTextSize(@IdRes int id, int unit, float size)`
+`void setVisibility(@IdRes int id, int visibility)`
+`void setSelected(@IdRes int id, boolean selected)`
+`void setEnabled(@IdRes int id, boolean enable)`
+`void setBackgroundColor(@IdRes int id, @ColorInt int color)`
+`void setBackgroundResource(@IdRes int id, @DrawableRes int resId)`
+`void setBackground(@IdRes int id, Drawable background)`
+`void setTag(@IdRes int id, final Object tag)`
+`void setTag(@IdRes int id, int key, final Object tag)`
+
++ 3、SimpleAdapter
 
 
 ### 4、Screenshots

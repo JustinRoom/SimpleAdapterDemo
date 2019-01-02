@@ -15,13 +15,13 @@ import android.widget.TextView;
  *
  * @author jsc
  */
-public class SimpleAdapter<H, I, F, E> extends BaseHeaderFooterAdapter<H, I, F, E, BaseHeaderFooterAdapter.BaseViewHolder> {
+public class SimpleAdapter<H, D, F, E> extends BaseHeaderFooterAdapter<H, D, F, E, BaseHeaderFooterAdapter.BaseViewHolder> {
 
     public SimpleAdapter() {
     }
 
-    public SimpleAdapter(@LayoutRes int itemLayoutId) {
-        super(itemLayoutId);
+    public SimpleAdapter(@LayoutRes int dataLayoutId) {
+        super(dataLayoutId);
     }
 
     @NonNull

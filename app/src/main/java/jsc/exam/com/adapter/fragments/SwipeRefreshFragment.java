@@ -63,6 +63,10 @@ public class SwipeRefreshFragment extends BaseFragment {
             @Override
             protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, ClassItem dataBean) {
                 holder.setText(R.id.tv_label, dataBean.getLabel());
+                //给child添加点击事件
+//                addOnChildClickListener(holder, R.id.tv_label);
+                //给child添加长按事件
+//                addOnChildLongClickListener(holder, R.id.tv_label);
             }
         };
         adapter3.setOnItemClickListener(new SimpleItemClickListener3<ClassItem>() {
@@ -76,7 +80,7 @@ public class SwipeRefreshFragment extends BaseFragment {
                 swipeRefreshRecyclerView.refresh();
             }
         });
-        adapter3.setOnItemLongClickListener(new SimpleItemLongClickListener3<ClassItem>(){
+        adapter3.setOnItemLongClickListener(new SimpleItemLongClickListener3<ClassItem>() {
             @Override
             public boolean onDataItemLongClick(@NonNull View dataItemView, int position, ClassItem dataBean) {
                 Toast.makeText(dataItemView.getContext(), "long clicked:" + dataBean.getLabel(), Toast.LENGTH_SHORT).show();

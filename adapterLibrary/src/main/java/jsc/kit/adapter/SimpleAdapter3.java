@@ -7,12 +7,12 @@ package jsc.kit.adapter;
  *
  * @author jsc
  */
-public class SimpleAdapter3<I> extends SimpleAdapter2<Object, I, Object> {
+public class SimpleAdapter3<D> extends SimpleAdapter2<Object, D, Object> {
 
     public SimpleAdapter3() {
     }
 
-    public SimpleAdapter3(int itemLayoutId) {
-        super(itemLayoutId);
+    public SimpleAdapter3(int dataLayoutId) {
+        super(dataLayoutId);
     }
 }
