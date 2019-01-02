@@ -116,7 +116,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 > 给child view添加点击事件:`addOnChildClickListener(@NonNull VH holder, @IdRes int id)`。  
 给child view添加长按事件:`addOnChildLongClickListener(@NonNull VH holder, @IdRes int id)`。
 
-[BaseViewHolder](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法：
+[BaseViewHolder](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法：  
 `<V extends View> V findViewById(@IdRes int id)`  
 `void setText(@IdRes int id, CharSequence txt)`  
 `void setTextColor(@IdRes int id, @ColorInt int color)`  
