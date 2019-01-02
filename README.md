@@ -98,20 +98,20 @@ compile 'jsc.kit.recycler:adapter-component:_latestVersion'
 + 2、BaseHeaderFooterAdapter
 
 > 头部header  
-设置header视图布局文件`public void setHeaderLayoutId(@LayoutRes int layoutId)`  
-绑定数据到header视图`protected void onBindHeaderViewHolder(@NonNull BaseViewHolder holder, int position, MaterielOrderDetail headerBean) {}`
+设置header视图布局文件`public void setHeaderLayoutId(@LayoutRes int layoutId)`。  
+绑定数据到header视图`protected void onBindHeaderViewHolder(@NonNull BaseViewHolder holder, int position, H headerBean) {}`。
 
 > 数据data  
-设置data视图布局文件`public void setDataLayoutId(@LayoutRes int layoutId)`
-绑定数据到data视图`protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, MaterielDetail dataBean) {}`
+设置data视图布局文件`public void setDataLayoutId(@LayoutRes int layoutId)`。  
+绑定数据到data视图`protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, D dataBean) {}`。
 
 > 底部footer  
-设置footer视图布局文件`public void setFooterLayoutId(@LayoutRes int layoutId)`
-绑定数据到footer视图`protected void onBindFooterViewHolder(@NonNull VH holder, int position, F footerBean) {}`
+设置footer视图布局文件`public void setFooterLayoutId(@LayoutRes int layoutId)`。  
+绑定数据到footer视图`protected void onBindFooterViewHolder(@NonNull VH holder, int position, F footerBean) {}`。
 
 > 空列表empty
-设置empty视图布局文件`public void setEmptyLayoutId(@LayoutRes int layoutId)`
-绑定数据到empty视图`protected void onBindEmptyViewHolder(@NonNull VH holder, int position, E emptyBean) {}`
+设置empty视图布局文件`public void setEmptyLayoutId(@LayoutRes int layoutId)`。  
+绑定数据到empty视图`protected void onBindEmptyViewHolder(@NonNull VH holder, int position, E emptyBean) {}`。
 
 
 
