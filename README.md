@@ -117,19 +117,19 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 给child view添加长按事件:`addOnChildLongClickListener(@NonNull VH holder, @IdRes int id)`。
 
 [BaseViewHolder](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法：
-`<V extends View> V findViewById(@IdRes int id)`
-`void setText(@IdRes int id, CharSequence txt)`
-`void setTextColor(@IdRes int id, @ColorInt int color)`
-`void setTextSize(@IdRes int id, float size)`
-`void setTextSize(@IdRes int id, int unit, float size)`
-`void setVisibility(@IdRes int id, int visibility)`
-`void setSelected(@IdRes int id, boolean selected)`
-`void setEnabled(@IdRes int id, boolean enable)`
-`void setBackgroundColor(@IdRes int id, @ColorInt int color)`
-`void setBackgroundResource(@IdRes int id, @DrawableRes int resId)`
-`void setBackground(@IdRes int id, Drawable background)`
-`void setTag(@IdRes int id, final Object tag)`
-`void setTag(@IdRes int id, int key, final Object tag)`
+`<V extends View> V findViewById(@IdRes int id)`  
+`void setText(@IdRes int id, CharSequence txt)`  
+`void setTextColor(@IdRes int id, @ColorInt int color)`  
+`void setTextSize(@IdRes int id, float size)`  
+`void setTextSize(@IdRes int id, int unit, float size)`  
+`void setVisibility(@IdRes int id, int visibility)`  
+`void setSelected(@IdRes int id, boolean selected)`  
+`void setEnabled(@IdRes int id, boolean enable)`  
+`void setBackgroundColor(@IdRes int id, @ColorInt int color)`  
+`void setBackgroundResource(@IdRes int id, @DrawableRes int resId)`  
+`void setBackground(@IdRes int id, Drawable background)`  
+`void setTag(@IdRes int id, final Object tag)`  
+`void setTag(@IdRes int id, int key, final Object tag)`  
 
 + 3.3、各种事件监听
 `itemView`的点击事件监听：
