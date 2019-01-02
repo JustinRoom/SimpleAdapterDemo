@@ -6,13 +6,13 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 2,
-      "versionName": "0.1.1",
+      "versionCode": 3,
+      "versionName": "0.1.2",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、create project."
+      "content": " \n1、optimize adapter."
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}
