@@ -1,4 +1,4 @@
-# Arc
+# SimpleAdapter
 **LatestVersion**
 
 [ ![Download](https://api.bintray.com/packages/justinquote/maven/adapter-component/images/download.svg) ](https://bintray.com/justinquote/maven/adapter-component/_latestVersion)
