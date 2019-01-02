@@ -6,7 +6,7 @@ def apkName = "${rootProject.name}.apk"
 android {
     compileSdkVersion sdk_veriosn
     defaultConfig {
-        applicationId "jsc.exam.com.arc"
+        applicationId "jsc.exam.com.adapter"
         minSdkVersion min_sdk_veriosn
         targetSdkVersion sdk_veriosn
         versionCode version_code
