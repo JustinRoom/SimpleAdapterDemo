@@ -91,7 +91,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
             }
         };
         adapter2.setHeaderLayoutId(R.layout.breed_fragment_materiel_detail_header);
-        adapter2.setDataItemLayoutId(R.layout.breed_list_item_materiel);
+        adapter2.setDataLayoutId(R.layout.breed_list_item_materiel);
         adapter2.bindRecyclerView(recyclerView);
         adapter2.addHeader(new MaterielOrderDetail());
 ```
