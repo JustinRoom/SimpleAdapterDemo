@@ -14,12 +14,12 @@ Scan QRCode to download demo application below:
 ### 1、implementation
 + 1.1、Gradle
 ```
-compile 'jsc.kit.recycler:adapter-component:_latestVersion'
+compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 ```
 + 1.2、Maven
 ```
 <dependency>
-  <groupId>jsc.kit.recycler</groupId>
+  <groupId>jsc.kit.adapter</groupId>
   <artifactId>adapter-component</artifactId>
   <version>_latestVersion</version>
   <type>pom</type>
