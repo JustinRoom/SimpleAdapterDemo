@@ -358,33 +358,40 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
         }
 
-        //release to refresh
-        if (isRefreshEnable() && getScrollY() < getRefreshThresholdValue()) {
-            if (!isRefreshing()) {
-                setState(RELEASE_TO_REFRESH);
+        if (getScrollY() < 0) {
+            if (!isRefreshEnable() || isRefreshing()) {
+                header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+                return;
             }
-            return;
-        }
-        //pull down to refresh
-        if (isRefreshEnable() && getScrollY() < 0) {
-            if (!isRefreshing()) {
+
+            if (getScrollY() < getRefreshThresholdValue()) {
+                //release to refresh
+                setState(RELEASE_TO_REFRESH);
+            } else {
+                //pull down to refresh
                 setState(PULL_DOWN_TO_REFRESH);
             }
-            return;
-        }
-        //release to load more
-        if (isLoadMoreEnable() && getScrollY() > getLoadMoreThresholdValue()) {
-            if (!isLoadingMore()) {
-                setState(RELEASE_TO_LOAD_MORE);
+            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+        } else if (getScrollY() > 0) {
+            if (!isLoadMoreEnable() || isLoadingMore()) {
+                footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
+                return;
             }
-            return;
-        }
-        //pull up to load more
-        if (isLoadMoreEnable() && getScrollY() > 0) {
-            if (!isLoadingMore()) {
+
+            if (getScrollY() > getLoadMoreThresholdValue()) {
+                //release to load more
+                setState(RELEASE_TO_LOAD_MORE);
+            } else {
+                //pull up to load more
                 setState(PULL_UP_TO_LOAD_MORE);
             }
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
+        } else {
+            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
         }
+
+
     }
 
     private void executeUpOrCancelMotionEvent(int velocity) {
@@ -673,6 +680,11 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             public void updateRefreshTips(int state, CharSequence txt) {
                 tvRefreshTips.setText(txt);
             }
+
+            @Override
+            public void onScroll(int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight) {
+
+            }
         };
     }
 
@@ -688,6 +700,11 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             @Override
             public void updateLoadMoreTips(@State int state, CharSequence txt) {
                 tvLoadMoreTips.setText(txt);
+            }
+
+            @Override
+            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) {
+
             }
         };
     }
