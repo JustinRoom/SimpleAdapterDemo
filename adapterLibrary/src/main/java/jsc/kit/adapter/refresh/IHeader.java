@@ -14,5 +14,5 @@ public interface IHeader {
 
     void initChildren(@NonNull View headerView);
     void updateLastRefreshTime(long lastRefreshTimeStamp);
-    void updateRefreshTips(CharSequence txt);
+    void updateRefreshTips(@PullToRefreshRecyclerView.State int state, CharSequence txt);
 }

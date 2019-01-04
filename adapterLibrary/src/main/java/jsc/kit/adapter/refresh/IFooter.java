@@ -13,5 +13,5 @@ import android.view.View;
 public interface IFooter {
 
     void initChildren(@NonNull View footerView);
-    void updateLoadMoreTips(CharSequence txt);
+    void updateLoadMoreTips(@PullToRefreshRecyclerView.State int state, CharSequence txt);
 }
