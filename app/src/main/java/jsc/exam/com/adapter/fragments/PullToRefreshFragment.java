@@ -18,7 +18,7 @@ import java.util.Random;
 import jsc.exam.com.adapter.R;
 import jsc.exam.com.adapter.bean.ClassItem;
 import jsc.exam.com.adapter.utils.CompatResourceUtils;
-import jsc.kit.adapter.PullToRefreshRecyclerView;
+import jsc.kit.adapter.refresh.PullToRefreshRecyclerView;
 import jsc.kit.adapter.SimpleAdapter3;
 import jsc.kit.adapter.SimpleItemClickListener3;
 import jsc.kit.adapter.SpaceItemDecoration;

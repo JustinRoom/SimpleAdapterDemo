@@ -1,4 +1,4 @@
-package jsc.kit.adapter;
+package jsc.kit.adapter.refresh;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -24,6 +24,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import jsc.kit.adapter.R;
+import jsc.kit.adapter.SimpleAnimatorListener;
 
 /**
  * <br>Email:1006368252@qq.com
@@ -116,11 +119,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     private ObjectAnimator animator = null;
 
     private View headerView;
-    private TextView tvLastRefreshTime;
-    private TextView tvRefreshTips;
     private RecyclerView recyclerView;
     private View footerView;
-    private TextView tvLoadMoreTips;
+    private IHeader header = null;
+    private IFooter footer = null;
 
     private VelocityTracker velocityTracker;
     private int mMinimumVelocity;
@@ -180,8 +182,8 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PullToRefreshRecyclerView, defStyleAttr, 0);
-        int headerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvHeaderLayout, R.layout.recycler_default_header_view);
-        int footerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvFooterLayout, R.layout.recycler_default_footer_view);
+        int headerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvHeaderLayout, -1);
+        int footerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvFooterLayout, -1);
 
         //refresh text
         pullDownToRefreshText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvPullDownToRefreshText) ?
@@ -212,14 +214,22 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 getResources().getString(R.string.recycler_default_load_more_completed);
         a.recycle();
 
-        headerView = LayoutInflater.from(context).inflate(headerLayoutId, this, false);
-        footerView = LayoutInflater.from(context).inflate(footerLayoutId, this, false);
+        if (headerLayoutId == -1) {
+            headerView = LayoutInflater.from(context).inflate(R.layout.recycler_default_header_view, this, false);
+            setHeader(createDefaultHeader());
+        } else {
+            headerView = LayoutInflater.from(context).inflate(headerLayoutId, this, false);
+        }
+        if (footerLayoutId == -1) {
+            footerView = LayoutInflater.from(context).inflate(R.layout.recycler_default_footer_view, this, false);
+            setFooter(createDefaultFooter());
+        } else {
+            footerView = LayoutInflater.from(context).inflate(footerLayoutId, this, false);
+        }
         addView(headerView, 0);
         addView(footerView);
 
-        tvLastRefreshTime = headerView.findViewById(R.id.recycler_tv_last_refresh_time);
-        tvRefreshTips = headerView.findViewById(R.id.recycler_tv_refresh_tips);
-        tvLoadMoreTips = footerView.findViewById(R.id.recycler_tv_load_more_tips);
+
         setHaveMore(false);
     }
 
@@ -426,7 +436,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                         case REFRESH_COMPLETED:
                             setState(INIT);
                             lastRefreshTimeStamp = System.currentTimeMillis();
-                            updateLastRefreshTime(lastRefreshTimeStamp);
+                            header.updateLastRefreshTime(lastRefreshTimeStamp);
                             break;
                         case LOAD_MORE_COMPLETED:
                             setState(INIT);
@@ -466,30 +476,6 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         }
     }
 
-    private void updateLastRefreshTime(long lastRefreshTimeStamp) {
-        if (tvLastRefreshTime != null) {
-            if (lastRefreshTimeStamp == 0) {
-                tvLastRefreshTime.setText("");
-                return;
-            }
-            tvLastRefreshTime.setText(String.format(
-                    Locale.CHINA,
-                    getResources().getString(R.string.recycler_default_last_refresh_time),
-                    new SimpleDateFormat("HH:mm", Locale.CHINA).format(new Date(lastRefreshTimeStamp))
-            ));
-        }
-    }
-
-    private void updateRefreshTips(CharSequence txt) {
-        if (tvRefreshTips != null)
-            tvRefreshTips.setText(txt);
-    }
-
-    private void updateLoadMoreTips(CharSequence txt) {
-        if (tvLoadMoreTips != null)
-            tvLoadMoreTips.setText(txt);
-    }
-
     private int getState() {
         return state;
     }
@@ -498,34 +484,34 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         this.state = state;
         switch (state) {
             case INIT:
-                updateRefreshTips("");
-                updateLoadMoreTips("");
+                header.updateRefreshTips("");
+                footer.updateLoadMoreTips("");
                 break;
 
             case PULL_DOWN_TO_REFRESH:
-                updateRefreshTips(pullDownToRefreshText);
+                header.updateRefreshTips(pullDownToRefreshText);
                 break;
             case RELEASE_TO_REFRESH:
-                updateRefreshTips(releaseToRefreshText);
+                header.updateRefreshTips(releaseToRefreshText);
                 break;
             case REFRESHING:
-                updateRefreshTips(refreshingText);
+                header.updateRefreshTips(refreshingText);
                 break;
             case REFRESH_COMPLETED:
-                updateRefreshTips(refreshCompletedText);
+                header.updateRefreshTips(refreshCompletedText);
                 break;
 
             case PULL_UP_TO_LOAD_MORE:
-                updateLoadMoreTips(pullUpToLoadMoreText);
+                footer.updateLoadMoreTips(pullUpToLoadMoreText);
                 break;
             case RELEASE_TO_LOAD_MORE:
-                updateLoadMoreTips(releaseToLoadMoreText);
+                footer.updateLoadMoreTips(releaseToLoadMoreText);
                 break;
             case LOADING_MORE:
-                updateLoadMoreTips(loadingMoreText);
+                footer.updateLoadMoreTips(loadingMoreText);
                 break;
             case LOAD_MORE_COMPLETED:
-                updateLoadMoreTips(loadMoreCompletedText);
+                footer.updateLoadMoreTips(loadMoreCompletedText);
                 break;
         }
     }
@@ -644,6 +630,66 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
         this.onRefreshListener = onRefreshListener;
+    }
+
+    public <H extends IHeader> void setHeader(@NonNull H header) {
+        this.header = header;
+        this.header.initChildren(headerView);
+    }
+
+    public <F extends IFooter> void setFooter(@NonNull F footer) {
+        this.footer = footer;
+        this.footer.initChildren(footerView);
+    }
+
+    private IHeader createDefaultHeader() {
+        return new IHeader() {
+            TextView tvLastRefreshTime;
+            TextView tvRefreshTips;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
+
+            @Override
+            public void initChildren(@NonNull View headerView) {
+                tvLastRefreshTime = headerView.findViewById(R.id.recycler_tv_last_refresh_time);
+                tvRefreshTips = headerView.findViewById(R.id.recycler_tv_refresh_tips);
+            }
+
+            @Override
+            public void updateLastRefreshTime(long lastRefreshTimeStamp) {
+                if (tvLastRefreshTime != null) {
+                    if (lastRefreshTimeStamp == 0) {
+                        tvLastRefreshTime.setText("");
+                        return;
+                    }
+                    tvLastRefreshTime.setText(String.format(
+                            Locale.CHINA,
+                            getResources().getString(R.string.recycler_default_last_refresh_time),
+                            dateFormat.format(new Date(lastRefreshTimeStamp))
+                    ));
+                }
+            }
+
+            @Override
+            public void updateRefreshTips(CharSequence txt) {
+                tvRefreshTips.setText(txt);
+            }
+        };
+    }
+
+    private IFooter createDefaultFooter() {
+        return new IFooter() {
+            TextView tvLoadMoreTips;
+
+            @Override
+            public void initChildren(@NonNull View footerView) {
+                tvLoadMoreTips = footerView.findViewById(R.id.recycler_tv_load_more_tips);
+            }
+
+            @Override
+            public void updateLoadMoreTips(CharSequence txt) {
+                tvLoadMoreTips.setText(txt);
+            }
+        };
     }
 
     public interface OnRefreshListener {
