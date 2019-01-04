@@ -8,6 +8,14 @@
     <declare-styleable name="PullToRefreshRecyclerView">
         <attr name="prvHeaderLayout" format="reference"/>
         <attr name="prvFooterLayout" format="reference"/>
+        <attr name="prvPullDownToRefreshText" format="string"/>
+        <attr name="prvReleaseToRefreshText" format="string"/>
+        <attr name="prvRefreshingText" format="string"/>
+        <attr name="prvRefreshCompletedText" format="string"/>
+        <attr name="prvPullUpToLoadMoreText" format="string"/>
+        <attr name="prvReleaseToLoadMoreText" format="string"/>
+        <attr name="prvLoadingMoreText" format="string"/>
+        <attr name="prvLoadMoreCompletedText" format="string"/>
     </declare-styleable>
 
 </resources>

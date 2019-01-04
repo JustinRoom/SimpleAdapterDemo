@@ -31,6 +31,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import jsc.exam.com.adapter.bean.ClassItem;
 import jsc.exam.com.adapter.fragments.AboutFragment;
+import jsc.exam.com.adapter.fragments.PullToRefreshFragment;
 import jsc.exam.com.adapter.fragments.SwipeRefreshFragment;
 import jsc.exam.com.adapter.retrofit.ApiService;
 import jsc.exam.com.adapter.retrofit.CustomHttpClient;
@@ -105,6 +106,7 @@ public class MainActivity extends BaseActivity {
     private List<ClassItem> getClassItems() {
         List<ClassItem> classItems = new ArrayList<>();
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "SwipeRefresh", SwipeRefreshFragment.class, false));
+        classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "PullToRefresh", PullToRefreshFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "About", AboutFragment.class, false));
         return classItems;
     }

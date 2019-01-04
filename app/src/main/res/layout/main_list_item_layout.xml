@@ -24,6 +24,12 @@
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
+    <View
+        android:id="@+id/red_dot_view"
+        android:layout_width="@dimen/space_8"
+        android:layout_height="@dimen/space_8"
+        android:background="@drawable/red_dot_shape"/>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
