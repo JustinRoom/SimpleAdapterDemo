@@ -13,6 +13,6 @@ import android.view.View;
 public interface IFooter {
 
     void initChildren(@NonNull View footerView);
-    void updateLoadMoreTips(@PullToRefreshRecyclerView.State int state, CharSequence txt);
+    void onUpdateState(@PullToRefreshRecyclerView.State int state, CharSequence txt);
     void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight);
 }

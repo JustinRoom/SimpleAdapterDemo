@@ -491,34 +491,34 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         this.state = state;
         switch (state) {
             case INIT:
-                header.updateRefreshTips(state, "");
-                footer.updateLoadMoreTips(state, "");
+                header.onUpdateState(state, "");
+                footer.onUpdateState(state, "");
                 break;
 
             case PULL_DOWN_TO_REFRESH:
-                header.updateRefreshTips(state, pullDownToRefreshText);
+                header.onUpdateState(state, pullDownToRefreshText);
                 break;
             case RELEASE_TO_REFRESH:
-                header.updateRefreshTips(state, releaseToRefreshText);
+                header.onUpdateState(state, releaseToRefreshText);
                 break;
             case REFRESHING:
-                header.updateRefreshTips(state, refreshingText);
+                header.onUpdateState(state, refreshingText);
                 break;
             case REFRESH_COMPLETED:
-                header.updateRefreshTips(state, refreshCompletedText);
+                header.onUpdateState(state, refreshCompletedText);
                 break;
 
             case PULL_UP_TO_LOAD_MORE:
-                footer.updateLoadMoreTips(state, pullUpToLoadMoreText);
+                footer.onUpdateState(state, pullUpToLoadMoreText);
                 break;
             case RELEASE_TO_LOAD_MORE:
-                footer.updateLoadMoreTips(state, releaseToLoadMoreText);
+                footer.onUpdateState(state, releaseToLoadMoreText);
                 break;
             case LOADING_MORE:
-                footer.updateLoadMoreTips(state, loadingMoreText);
+                footer.onUpdateState(state, loadingMoreText);
                 break;
             case LOAD_MORE_COMPLETED:
-                footer.updateLoadMoreTips(state, loadMoreCompletedText);
+                footer.onUpdateState(state, loadMoreCompletedText);
                 break;
         }
     }
@@ -677,7 +677,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
 
             @Override
-            public void updateRefreshTips(int state, CharSequence txt) {
+            public void onUpdateState(int state, CharSequence txt) {
                 tvRefreshTips.setText(txt);
             }
 
@@ -698,7 +698,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
 
             @Override
-            public void updateLoadMoreTips(@State int state, CharSequence txt) {
+            public void onUpdateState(@State int state, CharSequence txt) {
                 tvLoadMoreTips.setText(txt);
             }
 
