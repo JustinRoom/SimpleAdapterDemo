@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recycler_default_last_refresh_time">上一次刷新时间 : %s</string>
+    <string name="recycler_default_pull_down_to_refresh">下拉刷新</string>
+    <string name="recycler_default_release_to_refresh">释放刷新</string>
+    <string name="recycler_default_refreshing">正在刷新，请稍后</string>
+    <string name="recycler_default_refresh_completed">已刷新</string>
+    <string name="recycler_default_pull_up_to_load_more">上拉加载更多</string>
+    <string name="recycler_default_release_to_load_more">释放加载更多</string>
+    <string name="recycler_default_loading_more">正在加载，请稍后</string>
+    <string name="recycler_default_load_more_completed">已加载</string>
+</resources>
