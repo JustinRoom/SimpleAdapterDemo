@@ -33,9 +33,26 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 |:---|:---|:---|
 |`srrvLoadMoreLayout`|reference|加载更多layout|
 
++ 2.2、[SwipeRefreshRecyclerView](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/PullToRefreshRecyclerView.java)
+    
+| 名称 | 类型 | 描述 |
+|:---|:---|:---|
+|`srrvLoadMoreLayout`|reference|加载更多layout|
+|`prvHeaderLayout`|reference|下拉刷新头部layout|
+|`prvFooterLayout`|reference|上拉加载更多底部layout|
+|`prvPullDownToRefreshText`|string|下拉刷新提示|
+|`prvReleaseToRefreshText`|string|释放刷新提示|
+|`prvRefreshingText`|string|正在刷新提示|
+|`prvRefreshCompletedText`|string|刷新完成提示|
+|`prvPullUpToLoadMoreText`|string|上拉加载更多提示|
+|`prvReleaseToLoadMoreText`|string|释放加载更多提示|
+|`prvLoadingMoreText`|string|正在加载更多提示|
+|`prvLoadMoreCompletedText`|string|加载更多完成提示|
+
 ### 3、usage
 
-+ 3.1、示例：
+##### 3.1、SimpleAdapter
++ 3.1.1、示例：
 ```
         RecyclerView recyclerView;
 
@@ -95,7 +112,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
         adapter2.bindRecyclerView(recyclerView);
         adapter2.addHeader(new MaterielOrderDetail());
 ```
-+ 3.2、[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)
++ 3.1.2、[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)
 
 > 头部header  
 设置header视图布局文件`public void setHeaderLayoutId(@LayoutRes int layoutId)`。  
@@ -131,7 +148,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 `void setTag(@IdRes int id, final Object tag)`  
 `void setTag(@IdRes int id, int key, final Object tag)`  
 
-+ 3.3、各种事件监听
++ 3.1.3、各种事件监听
 `itemView`的点击事件监听：
 ```
 public interface OnItemClickListener<H, D, F, E> {
@@ -189,8 +206,185 @@ public interface OnItemChildLongClickListener<H, D, F, E> {
 
 ```
 
+##### 3.2、PullToRefreshRecyclerView
+**以手势监听方式实现，非Adapter外部包裹方式。**  
+**此方式实现优点**：不影响`RecyclerView.Adapter`各种原生操作
+
++ 3.2.1、示例：
+```
+        PullToRefreshRecyclerView pullToRefreshRecyclerView;
+    
+        //设置分页加载的起始页序号以及每页数据数量
+        pullToRefreshRecyclerView.initializeParameters(1, 10);
+        //关闭下拉刷新
+//        pullToRefreshRecyclerView.setRefreshEnable(false);
+        //关闭加载更多
+//        pullToRefreshRecyclerView.setLoadMoreEnable(false);
+        //设置下拉刷新和上拉加载更多监听
+        pullToRefreshRecyclerView.setOnRefreshListener(new PullToRefreshRecyclerView.OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull Context context, int currentPage, int pageSize) {
+                index = -1;
+                loadNetData();
+            }
+
+            @Override
+            public void onLoadMore(@NonNull Context context, int currentPage, int pageSize) {
+                loadNetData();
+            }
+        });
+        RecyclerView recyclerView = pullToRefreshRecyclerView.getRecyclerView();
+        recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
+        recyclerView.addItemDecoration(new SpaceItemDecoration(
+                CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_16),
+                CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_2)
+        ));
+        
+        
+//模拟加载网络数据
+    private int index = -1;
+    private Random random = new Random();
+    private void loadNetData(){
+        pullToRefreshRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //刷新（或加载更多）完成
+                pullToRefreshRecyclerView.completed();
+                List<ClassItem> items = new ArrayList<>();
+                int count = 7 + random.nextInt(12);
+                for (int i = 0; i < count; i++) {
+                    index ++;
+                    ClassItem item = new ClassItem();
+                    item.setLabel("this is " + index);
+                    items.add(item);
+                }
+
+                //判定是否是第一页数据
+                if (pullToRefreshRecyclerView.isFirstPage()) {
+                    adapter3.setData(items);
+                } else {
+                    adapter3.addData(items);
+                }
+                //设置是否还有下一页数据
+                pullToRefreshRecyclerView.setHaveMore(items.size() >= pullToRefreshRecyclerView.getPageSize());
+            }
+        }, 50 + random.nextInt(2000));
+    }
+```
+
++ 3.2.2、自定义下拉刷新：
+> 设置刷新（头部）
+```
+<jsc.kit.adapter.refresh.PullToRefreshRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:prvHeaderLayout="@layout/xxx"
+    android:id="@+id/pull_to_refresh_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+```
+
+> 设置刷新逻辑监听
+```
+public <H extends IHeader> void setHeader(@NonNull H header)
+```
+
+> 实现刷新逻辑
+```
+        IHeader header =  new IHeader() {
+
+            @Override
+            public void initChildren(@NonNull View headerView) {
+                //这里初始化下拉刷新view
+                //也就是app:prvHeaderLayout="@layout/xxx"属性对应的布局文件
+            }
+
+            @Override
+            public void updateLastRefreshTime(long lastRefreshTimeStamp) {
+                //这里是上次刷新时间更新监听
+            }
+
+            @Override
+            public void onUpdateState(int state, CharSequence txt) {
+                //这里是监听下拉刷新的各种状态
+                //监听到的状态有：PULL_DOWN_TO_REFRESH、RELEASE_TO_REFRESH、REFRESHING、REFRESH_COMPLETED
+                switch (state) {
+                    case PullToRefreshRecyclerView.REFRESHING:
+                        //正在刷新，我们可以正在这里启动正在刷新的动画
+                        
+                        break;
+                    case PullToRefreshRecyclerView.REFRESH_COMPLETED:
+                        //刷新完成，我们可以在这里关闭正在刷新的动画以及头部复位
+                        
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight, int refreshThresholdValue) {
+                //这里是监听下拉刷新动作
+                //监听到的状态有：INIT、PULL_DOWN_TO_REFRESH、RELEASE_TO_REFRESH、REFRESHING、REFRESH_COMPLETED
+            }
+        };
+```
+
++ 3.2.3、自定义上拉加载更多：
+> 设置加载更多（底部）
+```
+<jsc.kit.adapter.refresh.PullToRefreshRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:prvFooterLayout="@layout/xxx"
+    android:id="@+id/pull_to_refresh_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+```
+
+> 设置加载更多逻辑监听
+```
+public <H extends IHeader> void setHeader(@NonNull H header)
+```
+
+> 实现加载更多逻辑
+```
+        IFooter footer = new IFooter() {
+
+            @Override
+            public void initChildren(@NonNull View footerView) {
+                //这里初始化上拉加载更多view
+                //也就是app:prvFooterLayout="@layout/xxx"属性对应的布局文件
+            }
+
+            @Override
+            public void onUpdateState(@State int state, CharSequence txt) {
+                //这里是监听上拉加载更多的各种状态
+                //监听到的状态有：PULL_UP_TO_LOAD_MORE、RELEASE_TO_LOAD_MORE、LOADING_MORE、LOAD_MORE_COMPLETED
+                switch (state) {
+                    case PullToRefreshRecyclerView.LOADING_MORE:
+                        //正在加载更多，我们可以正在这里启动正在加载更多的动画
+                        
+                        break;
+                    case PullToRefreshRecyclerView.LOAD_MORE_COMPLETED:
+                        //加载更多完成，我们可以在这里关闭正在加载更多的动画以及底部复位
+                        
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) {
+                //这里是监听上拉加载更多动作
+                //监听到的状态有：INIT、PULL_UP_TO_LOAD_MORE、RELEASE_TO_LOAD_MORE、LOADING_MORE、LOAD_MORE_COMPLETED
+            }
+        };
+```
+
 
 ### 4、Screenshots
+
+![SimpleAdapter and PullToRefreshRecyclerView](/output/shots/pull_to_refresh_recycler_view.png)
 
 ### 5、release log
 
