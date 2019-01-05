@@ -33,7 +33,7 @@ compile 'jsc.kit.adapter:adapter-component:_latestVersion'
 |:---|:---|:---|
 |`srrvLoadMoreLayout`|reference|加载更多layout|
 
-+ 2.2、[SwipeRefreshRecyclerView](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/PullToRefreshRecyclerView.java)
++ 2.2、[PullToRefreshRecyclerView](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/PullToRefreshRecyclerView.java)【**推荐使用**】
     
 | 名称 | 类型 | 描述 |
 |:---|:---|:---|
