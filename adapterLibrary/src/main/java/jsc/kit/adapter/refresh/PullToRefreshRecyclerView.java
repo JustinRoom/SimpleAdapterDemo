@@ -54,7 +54,6 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     };
     public static final Property<View, Integer> SCROLL_Y = new Property<View, Integer>(Integer.class, "mScrollY") {
 
-
         @Override
         public Integer get(View object) {
             return object.getScrollY();
