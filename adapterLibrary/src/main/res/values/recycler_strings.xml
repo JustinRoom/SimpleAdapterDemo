@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="recycler_default_last_refresh_time">Last refresh time : %s</string>
+    <string name="recycler_default_last_refresh_time">Last refresh: %s</string>
     <string name="recycler_default_pull_down_to_refresh">Pull down to refresh.</string>
     <string name="recycler_default_release_to_refresh">Release to refresh.</string>
     <string name="recycler_default_refreshing">Refreshing&#8230;, wait a minute.</string>

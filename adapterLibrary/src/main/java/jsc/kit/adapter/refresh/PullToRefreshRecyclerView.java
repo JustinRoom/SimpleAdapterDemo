@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
@@ -360,7 +362,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
         if (getScrollY() < 0) {
             if (!isRefreshEnable() || isRefreshing()) {
-                header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+                header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
                 return;
             }
 
@@ -371,7 +373,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 //pull down to refresh
                 setState(PULL_DOWN_TO_REFRESH);
             }
-            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
         } else if (getScrollY() > 0) {
             if (!isLoadMoreEnable() || isLoadingMore()) {
                 footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
@@ -387,7 +389,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
             footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
         } else {
-            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight);
+            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
             footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
         }
 
@@ -419,6 +421,9 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     private void executeRebound(int destinationScrollY) {
         int scrollYDistance = destinationScrollY - getScrollY();
+        int duration = Math.abs(scrollYDistance);
+        duration = Math.max(200, duration);
+        duration = Math.min(500, duration);
         if (animator == null) {
             animator = ObjectAnimator.ofPropertyValuesHolder(this, PropertyValuesHolder.ofInt(SCROLL_Y, getScrollY(), destinationScrollY));
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -454,7 +459,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         } else {
             animator.setIntValues(getScrollY(), destinationScrollY);
         }
-        animator.setDuration(Math.abs(scrollYDistance));
+        animator.setDuration(duration);
         animator.start();
     }
 
@@ -651,14 +656,20 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     private IHeader createDefaultHeader() {
         return new IHeader() {
+            ProgressBar headerProgressBar;
+            ImageView ivHeaderIcon;
             TextView tvLastRefreshTime;
             TextView tvRefreshTips;
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.CHINA);
 
             @Override
             public void initChildren(@NonNull View headerView) {
+                headerProgressBar = headerView.findViewById(R.id.recycler_header_progress_bar);
+                ivHeaderIcon = headerView.findViewById(R.id.recycler_iv_header_icon);
                 tvLastRefreshTime = headerView.findViewById(R.id.recycler_tv_last_refresh_time);
                 tvRefreshTips = headerView.findViewById(R.id.recycler_tv_refresh_tips);
+
+                headerProgressBar.setVisibility(GONE);
             }
 
             @Override
@@ -679,27 +690,58 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             @Override
             public void onUpdateState(int state, CharSequence txt) {
                 tvRefreshTips.setText(txt);
+                switch (state) {
+                    case PullToRefreshRecyclerView.REFRESHING:
+                        headerProgressBar.setVisibility(VISIBLE);
+                        ivHeaderIcon.setVisibility(GONE);
+                        break;
+                    case PullToRefreshRecyclerView.REFRESH_COMPLETED:
+                        headerProgressBar.setVisibility(GONE);
+                        ivHeaderIcon.setVisibility(VISIBLE);
+                        ivHeaderIcon.setRotation(0);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             @Override
-            public void onScroll(int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight) {
-
+            public void onScroll(int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight, int refreshThresholdValue) {
+                if (!refreshEnable)
+                    return;
+                float rotation = 180 * 1.0f * scrollY / refreshThresholdValue;
+                rotation = Math.min(rotation, 180);
+                ivHeaderIcon.setRotation(rotation);
             }
         };
     }
 
     private IFooter createDefaultFooter() {
         return new IFooter() {
+            ProgressBar footerProgressBar;
             TextView tvLoadMoreTips;
 
             @Override
             public void initChildren(@NonNull View footerView) {
+                footerProgressBar = footerView.findViewById(R.id.recycler_footer_progress_bar);
                 tvLoadMoreTips = footerView.findViewById(R.id.recycler_tv_load_more_tips);
+
+                footerProgressBar.setVisibility(GONE);
             }
 
             @Override
             public void onUpdateState(@State int state, CharSequence txt) {
                 tvLoadMoreTips.setText(txt);
+                switch (state) {
+                    case PullToRefreshRecyclerView.LOADING_MORE:
+                        footerProgressBar.setVisibility(VISIBLE);
+                        break;
+                    case PullToRefreshRecyclerView.LOAD_MORE_COMPLETED:
+                        footerProgressBar.setVisibility(GONE);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             @Override

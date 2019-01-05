@@ -15,5 +15,5 @@ public interface IHeader {
     void initChildren(@NonNull View headerView);
     void updateLastRefreshTime(long lastRefreshTimeStamp);
     void onUpdateState(@PullToRefreshRecyclerView.State int state, CharSequence txt);
-    void onScroll(@PullToRefreshRecyclerView.State int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight);
+    void onScroll(@PullToRefreshRecyclerView.State int state, boolean refreshEnable, boolean isRefreshing, int scrollY, int headerHeight, int refreshThresholdValue);
 }
