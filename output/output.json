@@ -6,13 +6,13 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 4,
-      "versionName": "0.2.0",
+      "versionCode": 5,
+      "versionName": "0.2.1",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、update PullToRefreshRecyclerView."
+      "content": "\n1、update demo."
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}

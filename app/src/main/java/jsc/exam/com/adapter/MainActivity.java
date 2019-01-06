@@ -40,25 +40,29 @@ import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter3;
 import jsc.kit.adapter.SimpleItemClickListener3;
 import jsc.kit.adapter.SpaceItemDecoration;
+import jsc.kit.adapter.refresh.PullToRefreshRecyclerView;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 public class MainActivity extends BaseActivity {
 
-    RecyclerView recyclerView;
     SharedPreferences sharedPreferences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        recyclerView = new RecyclerView(this);
-        recyclerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        PullToRefreshRecyclerView pullToRefreshRecyclerView = new PullToRefreshRecyclerView(this);
+        pullToRefreshRecyclerView.setRefreshEnable(false);
+        pullToRefreshRecyclerView.setLoadMoreEnable(false);
+        pullToRefreshRecyclerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(pullToRefreshRecyclerView);
+
+        RecyclerView recyclerView = pullToRefreshRecyclerView.getRecyclerView();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new SpaceItemDecoration(
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_16),
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_2)
         ));
-        setContentView(recyclerView);
         setTitleBarTitle(getClass().getSimpleName().replace("Activity", ""));
         showTitleBarBackView(false);
 
