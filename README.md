@@ -12,6 +12,10 @@ Scan QRCode to download demo application below:
 ![](/app/src/main/res/drawable/simple_adapter_qr_code.png)
 
 ### 1、implementation
+You may implementation recycler view support package first.
+```
+implementation 'com.android.support:recyclerview-v7:xxx'
+```
 + 1.1、Gradle
 ```
 compile 'jsc.kit.adapter:adapter-component:_latestVersion'
