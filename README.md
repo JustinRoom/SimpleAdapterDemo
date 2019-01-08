@@ -393,6 +393,19 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 ### 5、release log
 
+#### version:0.2.2
+1、[IFooter](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/IFooter.java)  
++ change method void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) to void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight, int loadMoreThresholdValue).
+2、add some method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)  
++ public int toHeaderIndex(int position)
++ public int toHeaderPosition(int index)
++ public int toDataIndex(int position)
++ public int toDataPosition(int index)
++ public int toFooterIndex(int position)
++ public int toFooterPosition(int index)
++ public int toEmptyIndex(int position)
++ public int toEmptyPosition(int index)
+
 ### LICENSE
 ```
    Copyright 2019 JustinRoom
