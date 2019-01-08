@@ -205,6 +205,14 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         return headers.size();
     }
 
+    public int toHeaderIndex(int position) {
+        return position;
+    }
+
+    public int toHeaderPosition(int index) {
+        return index;
+    }
+
     @Nullable
     public H getHeaderAt(int position) {
         if (position < 0 || position >= getHeaderSize())
@@ -250,9 +258,17 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         return data.size();
     }
 
+    public int toDataIndex(int position) {
+        return position - getHeaderSize();
+    }
+
+    public int toDataPosition(int index) {
+        return getHeaderSize() + index;
+    }
+
     @Nullable
     public D getDataAt(int position) {
-        int index = position - getHeaderSize();
+        int index = toDataIndex(position);
         if (index < 0 || index >= getDataSize())
             return null;
         return data.get(index);
@@ -296,9 +312,17 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         return footers.size();
     }
 
+    public int toFooterIndex(int position) {
+        return position - getHeaderSize() - getInternalSize();
+    }
+
+    public int toFooterPosition(int index) {
+        return getHeaderSize() + getInternalSize() + index;
+    }
+
     @Nullable
     public F getFooterAt(int position) {
-        int index = position - getHeaderSize() - getInternalSize();
+        int index = toFooterIndex(position);
         if (index < 0 || index >= getFooterSize())
             return null;
         return footers.get(index);
@@ -342,9 +366,17 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         return empties.size();
     }
 
+    public int toEmptyIndex(int position) {
+        return position - getHeaderSize();
+    }
+
+    public int toEmptyPosition(int index) {
+        return getHeaderSize() + index;
+    }
+
     @Nullable
     public E getEmptyAt(int position) {
-        int index = position - getHeaderSize();
+        int index = toEmptyIndex(position);
         if (index < 0 || index >= getEmptySize())
             return null;
         return empties.get(index);

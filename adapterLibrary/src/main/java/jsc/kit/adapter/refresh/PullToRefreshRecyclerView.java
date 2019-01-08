@@ -375,7 +375,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
         } else if (getScrollY() > 0) {
             if (!isLoadMoreEnable() || isLoadingMore()) {
-                footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
+                footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
                 return;
             }
 
@@ -386,10 +386,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 //pull up to load more
                 setState(PULL_UP_TO_LOAD_MORE);
             }
-            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
         } else {
             header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
-            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight);
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
         }
 
 
@@ -744,7 +744,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
 
             @Override
-            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) {
+            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight, int loadMoreThresholdValue) {
 
             }
         };

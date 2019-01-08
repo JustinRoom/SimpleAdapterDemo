@@ -13,6 +13,21 @@ import android.view.View;
 public interface IFooter {
 
     void initChildren(@NonNull View footerView);
+
+    /**
+     * The call back of pulling up to load more.
+     * @param state See {@link PullToRefreshRecyclerView.State}.
+     * @param txt the tips of pulling up.
+     */
     void onUpdateState(@PullToRefreshRecyclerView.State int state, CharSequence txt);
-    void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight);
+
+    /**
+     * The call back of pulling up.
+     * @param state See {@link PullToRefreshRecyclerView.State}.
+     * @param loadMoreEnable load more enable or disable
+     * @param isLoadingMore true, loading more, else false.
+     * @param scrollY the scroll of y coordination
+     * @param footerHeight the height of the load more view.
+     */
+    void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight, int loadMoreThresholdValue);
 }
