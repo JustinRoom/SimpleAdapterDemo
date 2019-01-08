@@ -15,10 +15,11 @@ Scan QRCode to download demo application below:
 You may implementation recycler view support package first.
 ```
 implementation 'com.android.support:recyclerview-v7:xxx'
+implementation 'com.android.support:appcompat-v7:xxx'
 ```
 + 1.1、Gradle
 ```
-compile 'jsc.kit.adapter:adapter-component:_latestVersion'
+implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 ```
 + 1.2、Maven
 ```
