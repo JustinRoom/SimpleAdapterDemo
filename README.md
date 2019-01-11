@@ -379,7 +379,7 @@ public <H extends IHeader> void setHeader(@NonNull H header)
             }
 
             @Override
-            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) {
+            public void onScroll(int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight， int loadMoreThresholdValue) {
                 //这里是监听上拉加载更多动作
                 //监听到的状态有：INIT、PULL_UP_TO_LOAD_MORE、RELEASE_TO_LOAD_MORE、LOADING_MORE、LOAD_MORE_COMPLETED
             }
@@ -395,8 +395,11 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 #### version:0.2.2
 1、[IFooter](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/IFooter.java)  
-+ change method void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight) to void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight, int loadMoreThresholdValue).
+
++ change method `void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight)` to `void onScroll(@PullToRefreshRecyclerView.State int state, boolean loadMoreEnable, boolean isLoadingMore, int scrollY, int footerHeight, int loadMoreThresholdValue)`.
+
 2、add some method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)  
+
 + public int toHeaderIndex(int position)
 + public int toHeaderPosition(int index)
 + public int toDataIndex(int position)
