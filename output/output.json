@@ -6,13 +6,13 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 5,
-      "versionName": "0.2.1",
+      "versionCode": 7,
+      "versionName": "0.2.3",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、update demo."
+      "content": "\n1、update BaseHeaderFooterAdapter."
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}
