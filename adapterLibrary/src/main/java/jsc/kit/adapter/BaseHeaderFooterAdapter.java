@@ -509,76 +509,88 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return (V) child;
         }
 
-        public void setText(@IdRes int id, CharSequence txt) {
+        public BaseViewHolder setText(@IdRes int id, CharSequence txt) {
             View view = findViewById(id);
             if (view instanceof TextView)
                 ((TextView) view).setText(txt);
+            return this;
         }
 
-        public void setTextColor(@IdRes int id, @ColorInt int color) {
+        public BaseViewHolder setTextColor(@IdRes int id, @ColorInt int color) {
             View view = findViewById(id);
             if (view instanceof TextView)
                 ((TextView) view).setTextColor(color);
+            return this;
         }
 
-        public void setTextSize(@IdRes int id, float size) {
+        public BaseViewHolder setTextSize(@IdRes int id, float size) {
             View view = findViewById(id);
             if (view instanceof TextView)
                 ((TextView) view).setTextSize(size);
+            return this;
         }
 
-        public void setTextSize(@IdRes int id, int unit, float size) {
+        public BaseViewHolder setTextSize(@IdRes int id, int unit, float size) {
             View view = findViewById(id);
             if (view instanceof TextView)
                 ((TextView) view).setTextSize(unit, size);
+            return this;
         }
 
-        public void setVisibility(@IdRes int id, int visibility) {
+        public BaseViewHolder setVisibility(@IdRes int id, int visibility) {
             View view = findViewById(id);
             if (view != null)
                 view.setVisibility(visibility);
+            return this;
         }
 
-        public void setSelected(@IdRes int id, boolean selected) {
+        public BaseViewHolder setSelected(@IdRes int id, boolean selected) {
             View view = findViewById(id);
             if (view != null)
                 view.setSelected(selected);
+            return this;
         }
 
-        public void setEnabled(@IdRes int id, boolean enable) {
+        public BaseViewHolder setEnabled(@IdRes int id, boolean enable) {
             View view = findViewById(id);
             if (view != null)
                 view.setEnabled(enable);
+            return this;
         }
 
-        public void setBackgroundColor(@IdRes int id, @ColorInt int color) {
+        public BaseViewHolder setBackgroundColor(@IdRes int id, @ColorInt int color) {
             View view = findViewById(id);
             if (view != null)
                 view.setBackgroundColor(color);
+            return this;
         }
 
-        public void setBackgroundResource(@IdRes int id, @DrawableRes int resId) {
+        public BaseViewHolder setBackgroundResource(@IdRes int id, @DrawableRes int resId) {
             View view = findViewById(id);
             if (view != null)
                 view.setBackgroundResource(resId);
+            return this;
         }
 
-        public void setBackground(@IdRes int id, Drawable background) {
+        public BaseViewHolder setBackground(@IdRes int id, Drawable background) {
             View view = findViewById(id);
             if (view != null)
                 view.setBackground(background);
+            return this;
         }
 
-        public void setTag(@IdRes int id, final Object tag) {
+        public BaseViewHolder setTag(@IdRes int id, final Object tag) {
             View view = findViewById(id);
             if (view != null)
                 view.setTag(tag);
+            return this;
         }
 
-        public void setTag(@IdRes int id, int key, final Object tag) {
+        public BaseViewHolder setTag(@IdRes int id, int key, final Object tag) {
             View view = findViewById(id);
             if (view != null)
                 view.setTag(key, tag);
+            return this;
         }
 
 

@@ -64,8 +64,8 @@ public class PullToRefreshFragment extends BaseFragment {
         adapter3 = new SimpleAdapter3<ClassItem>(R.layout.main_list_item_layout) {
             @Override
             protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, ClassItem dataBean) {
-                holder.setText(R.id.tv_label, dataBean.getLabel());
-                holder.setVisibility(R.id.red_dot_view, View.GONE);
+                holder.setText(R.id.tv_label, dataBean.getLabel())
+                        .setVisibility(R.id.red_dot_view, View.GONE);
             }
         };
         adapter3.setOnItemClickListener(new SimpleItemClickListener3<ClassItem>() {
@@ -92,7 +92,8 @@ public class PullToRefreshFragment extends BaseFragment {
 
     private int index = -1;
     private Random random = new Random();
-    private void loadNetData(){
+
+    private void loadNetData() {
         pullToRefreshRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -100,7 +101,7 @@ public class PullToRefreshFragment extends BaseFragment {
                 List<ClassItem> items = new ArrayList<>();
                 int count = 7 + random.nextInt(12);
                 for (int i = 0; i < count; i++) {
-                    index ++;
+                    index++;
                     ClassItem item = new ClassItem();
                     item.setLabel("this is " + index);
                     items.add(item);
