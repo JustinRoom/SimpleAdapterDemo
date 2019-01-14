@@ -393,6 +393,10 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 ### 5、release log
 
+#### version:0.2.4
++ 1、add SimpleAdapter4.
++ 2、optimize SwipeRefreshRecyclerView.
+
 #### version:0.2.2
 1、[IFooter](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/IFooter.java)  
 
