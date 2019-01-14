@@ -6,13 +6,13 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 7,
-      "versionName": "0.2.3",
+      "versionCode": 8,
+      "versionName": "0.2.4",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、update BaseHeaderFooterAdapter."
+      "content": "\n1、add SimpleAdapter4.\n2、optimize SwipeRefreshRecyclerView."
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}

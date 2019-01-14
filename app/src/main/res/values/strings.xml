@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">SimpleAdapter</string>
     <string name="app_update_content" translatable="false">
-        \n1、update BaseHeaderFooterAdapter.
+        \n1、add SimpleAdapter4.
+        \n2、optimize SwipeRefreshRecyclerView.
     </string>
 </resources>
