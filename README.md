@@ -64,10 +64,10 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
         adapter2 = new SimpleAdapter2<MaterielOrderDetail, MaterielDetail, Object>() {
             @Override
             protected void onBindHeaderViewHolder(@NonNull BaseViewHolder holder, int position, MaterielOrderDetail headerBean) {
-                holder.setText(R.id.tv_company_name, formatValue("公司名称：", headerBean.getOrgName()));
-                holder.setText(R.id.tv_type, formatValue("\u3000类型：", headerBean.getEventTypeName()));
-                holder.setText(R.id.tv_warehouse_name, formatValue("仓库名称：", headerBean.getWarehouseName()));
-                holder.setText(R.id.tv_partner_name, formatValue("供应商：", headerBean.getPartnerName()));
+                holder.setText(R.id.tv_company_name, formatValue("公司名称：", headerBean.getOrgName()))
+                      .setText(R.id.tv_type, formatValue("\u3000类型：", headerBean.getEventTypeName()))
+                      .setText(R.id.tv_warehouse_name, formatValue("仓库名称：", headerBean.getWarehouseName()))
+                      .setText(R.id.tv_partner_name, formatValue("供应商：", headerBean.getPartnerName()));
                 if (headerBean.getCreateTime() > 0) {
                     holder.setText(R.id.tv_create_time, formatValue("创建时间：", format.format(new Date(headerBean.getCreateTime()))));
                 } else {
@@ -76,11 +76,11 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
                 holder.setText(R.id.tv_creator, formatValue("创建人：", headerBean.getCreatePersonName()));
                 //已经审核通过
                 if (MaterielMenu.orderStatus.get(2).getKey().equals(headerBean.getStatus())) {
-                    holder.setText(R.id.tv_auditing_time, formatValue("审核时间：", format.format(new Date(headerBean.getApproveTime()))));
-                    holder.setText(R.id.tv_auditor, formatValue("审核人：", headerBean.getApprovePersonName()));
+                    holder.setText(R.id.tv_auditing_time, formatValue("审核时间：", format.format(new Date(headerBean.getApproveTime()))))
+                          .setText(R.id.tv_auditor, formatValue("审核人：", headerBean.getApprovePersonName()));
                 } else {
-                    holder.setText(R.id.tv_auditing_time, formatValue("审核时间：", "--"));
-                    holder.setText(R.id.tv_auditor, formatValue("审核人：", "--"));
+                    holder.setText(R.id.tv_auditing_time, formatValue("审核时间：", "--"))
+                          .setText(R.id.tv_auditor, formatValue("审核人：", "--"));
                 }
 
                 holder.setText(R.id.tv_storage_type_label, String.format(Locale.CHINA, "%s物料：", opAction1 == IMateriel.OP_ACTION_IN ? "入库" : "出库"));
@@ -94,11 +94,11 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
                 } else {
                     holder.setText(R.id.tv_materiel_batch, "");
                 }
-                holder.setVisibility(R.id.btn_materiel_delete, View.GONE);
-                holder.setText(R.id.tv_business_unit, formatValue("业务单位：", dataBean.getMultiUnitName()));
-                holder.setText(R.id.tv_business_number, formatValue("业务数量：", String.valueOf(dataBean.getQuantity())));
-                holder.setText(R.id.tv_accounting_unit, formatValue("核算单位：", dataBean.getAccountUnitName()));
-                holder.setText(R.id.tv_accounting_number, formatValue("核算数量：", String.valueOf(dataBean.getAccountQuantity())));
+                holder.setVisibility(R.id.btn_materiel_delete, View.GONE)
+                      .setText(R.id.tv_business_unit, formatValue("业务单位：", dataBean.getMultiUnitName()))
+                      .setText(R.id.tv_business_number, formatValue("业务数量：", String.valueOf(dataBean.getQuantity())))
+                      .setText(R.id.tv_accounting_unit, formatValue("核算单位：", dataBean.getAccountUnitName()))
+                      .setText(R.id.tv_accounting_number, formatValue("核算数量：", String.valueOf(dataBean.getAccountQuantity())));
             }
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd\u2000HH:mm", Locale.CHINA);
