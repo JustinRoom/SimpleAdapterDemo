@@ -61,18 +61,7 @@ public class SwipeRefreshRecyclerView extends FrameLayout {
                 return;
             }
 
-            boolean isLastItemVisible = false;
-            int itemCount = adapter.getItemCount();
-            if (layoutManager instanceof LinearLayoutManager) {
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                isLastItemVisible = linearLayoutManager.findLastCompletelyVisibleItemPosition() + 1 == itemCount;
-            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-                StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
-                int[] lastItemPositions = staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(null);
-                isLastItemVisible = lastItemPositions.length > 0 && (lastItemPositions[lastItemPositions.length - 1] + 1 == itemCount);
-            }
-//            swipeRefreshLayout.setEnabled(isRefreshEnable() && isFirstItemVisible);
-            if (isLoading() || !isLoadMoreEnable() || !isHasMorePage() || !isLastItemVisible)
+            if (isLoading() || !isLoadMoreEnable() || !isHasMorePage() || !isScrollToBottom())
                 return;
 
             //如果第一条和最后一条同时可见
@@ -192,6 +181,16 @@ public class SwipeRefreshRecyclerView extends FrameLayout {
         if (defaultLoadedAnimator == null)
             defaultLoadedAnimator = createDefaultLoadedAnimator();
         defaultLoadedAnimator.start();
+    }
+
+    /**
+     * Whether scrolled to the bottom of list.
+     * @return true, scrolled to the bottom of list, else false.
+     */
+    private boolean isScrollToBottom() {
+        return recyclerView.computeVerticalScrollRange() <=
+                recyclerView.computeVerticalScrollOffset() +
+                recyclerView.computeVerticalScrollExtent();
     }
 
     public SwipeRefreshLayout getSwipeRefreshLayout() {
