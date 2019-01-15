@@ -21,7 +21,7 @@ import jsc.kit.adapter.SimpleAdapter3;
 import jsc.kit.adapter.SimpleItemClickListener3;
 import jsc.kit.adapter.SimpleItemLongClickListener3;
 import jsc.kit.adapter.SpaceItemDecoration;
-import jsc.kit.adapter.SwipeRefreshRecyclerView;
+import jsc.kit.adapter.refresh.SwipeRefreshRecyclerView;
 
 
 /**

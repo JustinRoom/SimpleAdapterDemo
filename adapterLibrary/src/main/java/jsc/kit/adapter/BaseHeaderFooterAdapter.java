@@ -427,7 +427,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         recyclerView.setAdapter(this);
     }
 
-    private boolean isEmptyData() {
+    public boolean isEmptyData() {
         return getData().isEmpty();
     }
 

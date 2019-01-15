@@ -1,4 +1,4 @@
-package jsc.kit.adapter;
+package jsc.kit.adapter.refresh;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -19,6 +19,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import jsc.kit.adapter.R;
+import jsc.kit.adapter.SimpleAnimatorListener;
 
 /**
  * <br>Email:1006368252@qq.com

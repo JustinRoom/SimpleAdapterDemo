@@ -32,7 +32,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 ```
 
 ### 2、attrs
-+ 2.1、[SwipeRefreshRecyclerView](/adapterLibrary/src/main/java/jsc/kit/adapter/SwipeRefreshRecyclerView.java)
++ 2.1、[SwipeRefreshRecyclerView](/adapterLibrary/src/main/java/jsc/kit/adapter/refresh/SwipeRefreshRecyclerView.java)
 
 | 名称 | 类型 | 描述 |
 |:---|:---|:---|
