@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">SimpleAdapter</string>
     <string name="app_update_content" translatable="false">
-        \n1、add SimpleAdapter4.
-        \n2、optimize SwipeRefreshRecyclerView.
+        \n1、优化BaseHeaderFooterAdapter.
+        \n2、新增快速实现RecyclerView单选、复选示例.
     </string>
 </resources>
