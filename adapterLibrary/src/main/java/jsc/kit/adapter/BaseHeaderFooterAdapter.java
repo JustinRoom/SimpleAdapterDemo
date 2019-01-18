@@ -1,5 +1,6 @@
 package jsc.kit.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
@@ -498,7 +500,6 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             super(itemView);
         }
 
-
         public <V extends View> V findViewById(@IdRes int id) {
             View child = childrenCache.get(id);
             if (child == null) {
@@ -576,6 +577,27 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             View view = findViewById(id);
             if (view != null)
                 view.setBackground(background);
+            return this;
+        }
+
+        public BaseViewHolder setImageDrawable(@IdRes int id, Drawable drawable) {
+            View view = findViewById(id);
+            if (view instanceof ImageView)
+                ((ImageView) view).setImageDrawable(drawable);
+            return this;
+        }
+
+        public BaseViewHolder setImageDrawable(@IdRes int id, Bitmap drawable) {
+            View view = findViewById(id);
+            if (view instanceof ImageView)
+                ((ImageView) view).setImageBitmap(drawable);
+            return this;
+        }
+
+        public BaseViewHolder setImageResource(@IdRes int id, @DrawableRes int resId) {
+            View view = findViewById(id);
+            if (view instanceof ImageView)
+                ((ImageView) view).setImageResource(resId);
             return this;
         }
 
