@@ -393,6 +393,10 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 ### 5、release log
 
+#### version:0.2.6
++ 1、优化BaseHeaderFooterAdapter.  
++ 2、新增快速实现RecyclerView单选、复选示例.
+
 #### version:0.2.4
 + 1、add SimpleAdapter4.
 + 2、optimize SwipeRefreshRecyclerView.
