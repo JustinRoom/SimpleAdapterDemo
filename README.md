@@ -395,7 +395,7 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 #### version:0.2.6
 1、优化BaseHeaderFooterAdapter.  
-2、新增快速实现RecyclerView单选、复选示例.
+2、新增快速实现RecyclerView单选、复选示例.  
 3、add some method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)  
 
 + `public BaseViewHolder setImageDrawable(@IdRes int id, Drawable drawable)`
