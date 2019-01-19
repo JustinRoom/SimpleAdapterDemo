@@ -159,6 +159,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法： 
 
  //header
+ 
 `public List<H> getHeaders()`  
 `public int getHeaderSize()`  
 `public int toHeaderIndex(int position)`  
@@ -170,6 +171,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 `public void clearHeaders()`  
 
 //data
+
 `public List<D> getData()`  
 `public int getDataSize()`  
 `public int toDataIndex(int position)`  
@@ -181,6 +183,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 `public void clearData()`  
 
 //footer
+
 `public List<F> getFooters()`  
 `public int getFooterSize()`  
 `public int toFooterIndex(int position)`  
@@ -192,6 +195,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 `public void clearFooters()`  
     
 //empties
+
 `public List<E> getEmpties()`  
 `public int getEmptySize()`  
 `public int toEmptyIndex(int position)`  
