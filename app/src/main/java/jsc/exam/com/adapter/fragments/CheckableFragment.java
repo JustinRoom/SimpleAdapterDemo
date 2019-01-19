@@ -42,11 +42,11 @@ public class CheckableFragment extends BaseFragment {
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_16),
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_2)
         ));
-        adapter3 = new SimpleAdapter3<CustomBean>(R.layout.main_list_item_layout) {
+        adapter3 = new SimpleAdapter3<CustomBean>(R.layout.checkable_list_item_layout) {
             @Override
             protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, CustomBean dataBean) {
                 holder.setText(R.id.tv_label, dataBean.getLabel())
-                        .setVisibility(R.id.red_dot_view, dataBean.isSelected() ? View.VISIBLE : View.GONE);
+                        .setSelected(R.id.iv_selected_state, dataBean.isSelected());
             }
         };
         adapter3.setOnItemClickListener(new SimpleItemClickListener3<CustomBean>() {
