@@ -140,18 +140,73 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 
 [BaseViewHolder](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法：  
 `<V extends View> V findViewById(@IdRes int id)`  
-`void setText(@IdRes int id, CharSequence txt)`  
-`void setTextColor(@IdRes int id, @ColorInt int color)`  
-`void setTextSize(@IdRes int id, float size)`  
-`void setTextSize(@IdRes int id, int unit, float size)`  
-`void setVisibility(@IdRes int id, int visibility)`  
-`void setSelected(@IdRes int id, boolean selected)`  
-`void setEnabled(@IdRes int id, boolean enable)`  
-`void setBackgroundColor(@IdRes int id, @ColorInt int color)`  
-`void setBackgroundResource(@IdRes int id, @DrawableRes int resId)`  
-`void setBackground(@IdRes int id, Drawable background)`  
-`void setTag(@IdRes int id, final Object tag)`  
-`void setTag(@IdRes int id, int key, final Object tag)`  
+`BaseViewHolder setText(@IdRes int id, CharSequence txt)`  
+`BaseViewHolder setTextColor(@IdRes int id, @ColorInt int color)`  
+`BaseViewHolder setTextSize(@IdRes int id, float size)`  
+`BaseViewHolder setTextSize(@IdRes int id, int unit, float size)`  
+`BaseViewHolder setVisibility(@IdRes int id, int visibility)`  
+`BaseViewHolder setSelected(@IdRes int id, boolean selected)`  
+`BaseViewHolder setEnabled(@IdRes int id, boolean enable)`  
+`BaseViewHolder setBackgroundColor(@IdRes int id, @ColorInt int color)`  
+`BaseViewHolder setBackgroundResource(@IdRes int id, @DrawableRes int resId)`  
+`BaseViewHolder setBackground(@IdRes int id, Drawable background)`  
+`BaseViewHolder setImageDrawable(@IdRes int id, Drawable drawable)`  
+`BaseViewHolder setImageBitmap(@IdRes int id, Bitmap bitmap)`  
+`BaseViewHolder setImageResource(@IdRes int id, @DrawableRes int resId)`  
+`BaseViewHolder setTag(@IdRes int id, final Object tag)`  
+`BaseViewHolder setTag(@IdRes int id, int key, final Object tag)`  
+
+[BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法： 
+
+ //header
+`public List<H> getHeaders()`  
+`public int getHeaderSize()`  
+`public int toHeaderIndex(int position)`  
+`public int toHeaderPosition(int index)`  
+`public H getHeaderAt(int position)`  
+`public void setHeaders(List<H> headers)`  
+`public void addHeaders(List<H> headers)`  
+`public void addHeader(H header)`  
+`public void clearHeaders()`  
+
+//data
+`public List<D> getData()`  
+`public int getDataSize()`  
+`public int toDataIndex(int position)`  
+`public int toDataPosition(int index)`  
+`public D getDataAt(int position)`  
+`public void setData(List<D> data)`  
+`public void addData(List<D> data)`  
+`public void addData(D data)`  
+`public void clearData()`  
+
+//footer
+`public List<F> getFooters()`  
+`public int getFooterSize()`  
+`public int toFooterIndex(int position)`  
+`public int toFooterPosition(int index)`  
+`public F getFooterAt(int position)`  
+`public void setFooters(List<F> footers)`  
+`public void addFooters(List<F> footers)`  
+`public void addFooter(F footer)`  
+`public void clearFooters()`  
+    
+//empties
+`public List<E> getEmpties()`  
+`public int getEmptySize()`  
+`public int toEmptyIndex(int position)`  
+`public int toEmptyPosition(int index)`  
+`public E getEmptyAt(int position)`  
+`public void setEmpties(List<E> empties)`  
+`public void addEmpties(List<E> empties)`  
+`public void addEmpty(E empty)`  
+`public void clearEmpties()`  
+
+`public void addOnChildClickListener(@NonNull VH holder, @IdRes int id)`  
+`public void addOnChildLongClickListener(@NonNull VH holder, @IdRes int id)`  
+`public final void bindRecyclerView(@NonNull RecyclerView recyclerView)`  
+`public boolean isEmptyData()`  
+`private int getInternalSize()`  
 
 + 3.1.3、各种事件监听
 `itemView`的点击事件监听：
@@ -395,13 +450,16 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 #### version:0.2.7
 1、change method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java) 
++ change `public BaseViewHolder setImageDrawable(@IdRes int id, Bitmap drawable)` to `public BaseViewHolder setImageBitmap(@IdRes int id, Bitmap bitmap)`
 
 #### version:0.2.6
 1、优化BaseHeaderFooterAdapter.  
 2、新增快速实现RecyclerView单选、复选示例.  
 3、add some method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)  
 
-+ change `public BaseViewHolder setImageDrawable(@IdRes int id, Bitmap drawable)` to `public BaseViewHolder setImageBitmap(@IdRes int id, Bitmap bitmap)`
++ `public BaseViewHolder setImageDrawable(@IdRes int id, Drawable drawable)`
++ `public BaseViewHolder setImageDrawable(@IdRes int id, Bitmap drawable)`
++ `public BaseViewHolder setImageResource(@IdRes int id, @DrawableRes int resId)`
 
 #### version:0.2.4
 1、add SimpleAdapter4.  
