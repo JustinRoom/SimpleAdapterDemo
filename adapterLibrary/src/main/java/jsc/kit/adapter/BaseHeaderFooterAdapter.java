@@ -587,10 +587,10 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return this;
         }
 
-        public BaseViewHolder setImageDrawable(@IdRes int id, Bitmap drawable) {
+        public BaseViewHolder setImageBitmap(@IdRes int id, Bitmap bitmap) {
             View view = findViewById(id);
             if (view instanceof ImageView)
-                ((ImageView) view).setImageBitmap(drawable);
+                ((ImageView) view).setImageBitmap(bitmap);
             return this;
         }
 
