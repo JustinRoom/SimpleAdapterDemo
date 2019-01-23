@@ -11,6 +11,11 @@ Scan QRCode to download demo application below:
 
 ![](/app/src/main/res/drawable/simple_adapter_qr_code.png)
 
+### Screenshots
+
+![SimpleAdapter](/output/shots/simple_adapter.png)
+![PullToRefreshRecyclerView](/output/shots/pull_to_refresh_recycler_view.png)
+
 ### 1、implementation
 You may implementation recycler view support package first.
 ```
@@ -448,12 +453,7 @@ public <H extends IHeader> void setHeader(@NonNull H header)
         };
 ```
 
-
-### 4、Screenshots
-
-![SimpleAdapter and PullToRefreshRecyclerView](/output/shots/pull_to_refresh_recycler_view.png)
-
-### 5、release log
+### 4、release log
 
 #### version:0.3.0
 1、优化BaseHeaderFooterAdapter.  

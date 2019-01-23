@@ -105,7 +105,7 @@ public class PullToRefreshFragment extends BaseFragment {
             public void run() {
                 pullToRefreshRecyclerView.completed();
                 List<ClassItem> items = new ArrayList<>();
-                int count = 7 + random.nextInt(12);
+                int count = 4 + random.nextInt(12);
                 for (int i = 0; i < count; i++) {
                     index++;
                     ClassItem item = new ClassItem();
