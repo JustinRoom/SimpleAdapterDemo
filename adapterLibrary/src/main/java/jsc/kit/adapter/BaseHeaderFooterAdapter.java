@@ -80,7 +80,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
                 @Override
                 public void onClick(View v) {
                     ensureBindedRecyclerView();
-                    int position = recyclerView.getChildAdapterPosition(v);
+                    int position = recyclerView.getChildAdapterPosition(v) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -113,7 +113,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
                 @Override
                 public boolean onLongClick(View v) {
                     ensureBindedRecyclerView();
-                    int position = recyclerView.getChildAdapterPosition(v);
+                    int position = recyclerView.getChildAdapterPosition(v) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -140,7 +140,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
                 public void onClick(View v) {
                     ensureBindedRecyclerView();
                     View itemView = recyclerView.findContainingItemView(v);
-                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView);
+                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -174,7 +174,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
                 public boolean onLongClick(View v) {
                     ensureBindedRecyclerView();
                     View itemView = recyclerView.findContainingItemView(v);
-                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView);
+                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -450,6 +450,10 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
 
     public int toEmptyPosition(int index) {
         return getHeaderSize() + index;
+    }
+
+    protected int getCustomHeaderSize(){
+        return 0;
     }
 
     @Nullable
