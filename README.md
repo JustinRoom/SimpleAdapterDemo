@@ -57,6 +57,9 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 ### 3、usage
 
 ##### 3.1、SimpleAdapter
+
+> **特别提醒：**  请一定要调用`public final void bindRecyclerView(@NonNull RecyclerView recyclerView)`方法绑定`RecyclerView`，否则点击事件和长按事件无效。
+
 + 3.1.1、示例：
 ```
         RecyclerView recyclerView;
@@ -451,6 +454,10 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 ![SimpleAdapter and PullToRefreshRecyclerView](/output/shots/pull_to_refresh_recycler_view.png)
 
 ### 5、release log
+
+#### version:0.3.0
+1、优化BaseHeaderFooterAdapter.  
+2、修复点击和长按事件无效Bug。
 
 #### version:0.2.7
 1、change method for [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java) 
