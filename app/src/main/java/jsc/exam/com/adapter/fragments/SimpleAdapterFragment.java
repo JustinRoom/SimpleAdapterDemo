@@ -18,6 +18,7 @@ import jsc.exam.com.adapter.R;
 import jsc.exam.com.adapter.bean.CustomBean;
 import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter;
+import jsc.kit.adapter.SimpleItemChildClickListener;
 import jsc.kit.adapter.SimpleItemClickListener;
 import jsc.kit.adapter.SpaceItemDecoration;
 
@@ -52,6 +53,7 @@ public class SimpleAdapterFragment extends BaseFragment implements View.OnClickL
             @Override
             protected void onBindHeaderViewHolder(@NonNull BaseViewHolder holder, int position, Object headerBean) {
                 holder.setImageResource(R.id.iv_header, R.drawable.picture);
+                addOnChildClickListener(holder, R.id.btn_header);
             }
 
             @Override
@@ -62,8 +64,13 @@ public class SimpleAdapterFragment extends BaseFragment implements View.OnClickL
         adapter.setOnItemClickListener(new SimpleItemClickListener<Object, CustomBean, Object, Object>() {
             @Override
             public void onDataItemClick(@NonNull View dataItemView, int position, CustomBean dataBean) {
-                //实现单选
                 Toast.makeText(dataItemView.getContext(), "clicked:" + dataBean.getLabel(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        adapter.setOnItemChildClickListener(new SimpleItemChildClickListener<Object, CustomBean, Object, Object>() {
+            @Override
+            public void onHeaderItemChildClick(@NonNull View headerChild, int position, Object headerBean) {
+                Toast.makeText(headerChild.getContext(), "clicked header:" + position, Toast.LENGTH_SHORT).show();
             }
         });
         adapter.setHeaderLayoutId(R.layout.list_header_layout);

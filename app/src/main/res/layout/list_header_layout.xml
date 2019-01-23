@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jsc.exam.com.adapter.widgets.FiveTwoImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/iv_header"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:scaleType="centerCrop" />
+    android:layout_height="wrap_content">
+
+    <jsc.exam.com.adapter.widgets.FiveTwoImageView
+        android:id="@+id/iv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/btn_header"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/space_4"
+        android:layout_marginEnd="@dimen/space_12"
+        android:background="@drawable/button_selector"
+        android:gravity="center"
+        android:text="click me"
+        android:textColor="@android:color/white" />
+
+</FrameLayout>

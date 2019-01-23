@@ -56,6 +56,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     public @interface ViewType {
     }
 
+    private RecyclerView recyclerView;
     private int headerLayoutId = -1;
     private int dataLayoutId = -1;
     private int footerLayoutId = -1;
@@ -78,7 +79,8 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultItemClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = (Integer) v.getTag(R.id.recycler_default_view_position);
+                    ensureBindedRecyclerView();
+                    int position = recyclerView.getChildAdapterPosition(v);
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -110,7 +112,8 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultItemLongClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    int position = (Integer) v.getTag(R.id.recycler_default_view_position);
+                    ensureBindedRecyclerView();
+                    int position = recyclerView.getChildAdapterPosition(v);
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -135,7 +138,9 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultChildClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = (Integer) v.getTag(R.id.recycler_default_view_position);
+                    ensureBindedRecyclerView();
+                    View itemView = recyclerView.findContainingItemView(v);
+                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView);
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -167,7 +172,9 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultChildLongClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    int position = (Integer) v.getTag(R.id.recycler_default_view_position);
+                    ensureBindedRecyclerView();
+                    View itemView = recyclerView.findContainingItemView(v);
+                    int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView);
                     int viewType = getItemViewType(position);
                     switch (viewType) {
                         case TYPE_HEADER:
@@ -519,7 +526,13 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     }
 
     public final void bindRecyclerView(@NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
         recyclerView.setAdapter(this);
+    }
+
+    private void ensureBindedRecyclerView(){
+        if (recyclerView == null)
+            throw new IllegalStateException("Please bind RecyclerView first by calling method bindRecyclerView(@NonNull RecyclerView recyclerView).");
     }
 
     public boolean isEmptyData() {
@@ -552,7 +565,6 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     @CallSuper
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.setPositionTag(position);
         holder.addOnItemClickListener(onItemClickListener == null ? null : getDefaultItemClickListener());
         holder.addOnItemLongClickListener(onItemLongClickListener == null ? null : getDefaultItemLongClickListener());
         switch (getItemViewType(position)) {
@@ -708,7 +720,6 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return this;
         }
 
-
         void setPositionTag(int position) {
             itemView.setTag(R.id.recycler_default_view_position, position);
         }
@@ -722,19 +733,15 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
 
         void addOnChildClickListener(@IdRes int id, View.OnClickListener listener) {
-            int position = (Integer) itemView.getTag(R.id.recycler_default_view_position);
             View child = findViewById(id);
             if (child != null) {
-                child.setTag(R.id.recycler_default_view_position, position);
                 child.setOnClickListener(listener);
             }
         }
 
         void addOnChildLongClickListener(@IdRes int id, View.OnLongClickListener listener) {
-            int position = (Integer) itemView.getTag(R.id.recycler_default_view_position);
             View child = findViewById(id);
             if (child != null) {
-                child.setTag(R.id.recycler_default_view_position, position);
                 child.setOnLongClickListener(listener);
             }
         }
