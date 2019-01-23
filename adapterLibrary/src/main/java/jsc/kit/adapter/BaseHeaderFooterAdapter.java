@@ -243,11 +243,34 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
     }
 
+    public void addHeader(int index, H header) {
+        if (header != null) {
+            headers.add(index, header);
+            notifyItemInserted(toHeaderPosition(index));
+        }
+    }
+
     public void clearHeaders() {
         if (!headers.isEmpty()) {
             headers.clear();
             notifyDataSetChanged();
         }
+    }
+
+    public void removeHeader(int index) {
+        if (index < 0 || index >= getHeaderSize())
+            return;
+        int pos = toHeaderPosition(index);
+        headers.remove(index);
+        notifyItemRemoved(pos);
+    }
+
+    public void updateHeader(int index, H header) {
+        if (index < 0 || index >= getHeaderSize())
+            return;
+        if (header != null)
+            headers.set(index, header);
+        notifyItemChanged(toHeaderPosition(index));
     }
 
     //data
@@ -297,11 +320,34 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
     }
 
+    public void addData(int index, D data) {
+        if (data != null) {
+            this.data.add(index, data);
+            notifyItemInserted(toDataPosition(index));
+        }
+    }
+
     public void clearData() {
         if (!data.isEmpty()) {
             data.clear();
             notifyDataSetChanged();
         }
+    }
+
+    public void removeData(int index) {
+        if (index < 0 || index >= getDataSize())
+            return;
+        int pos = toDataPosition(index);
+        data.remove(index);
+        notifyItemRemoved(pos);
+    }
+
+    public void updateData(int index, D data) {
+        if (index < 0 || index >= getDataSize())
+            return;
+        if (data != null)
+            this.data.set(index, data);
+        notifyItemChanged(toDataPosition(index));
     }
 
     //footer
@@ -351,11 +397,34 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
     }
 
+    public void addFooter(int index, F footer) {
+        if (footer != null) {
+            this.footers.add(index, footer);
+            notifyItemInserted(toFooterPosition(index));
+        }
+    }
+
     public void clearFooters() {
         if (!footers.isEmpty()) {
             footers.clear();
             notifyDataSetChanged();
         }
+    }
+
+    public void removeFooter(int index) {
+        if (index < 0 || index >= getFooterSize())
+            return;
+        int pos = toFooterPosition(index);
+        footers.remove(index);
+        notifyItemRemoved(pos);
+    }
+
+    public void updateFooter(int index, F footer) {
+        if (index < 0 || index >= getFooterSize())
+            return;
+        if (footer != null)
+            this.footers.set(index, footer);
+        notifyItemChanged(toFooterPosition(index));
     }
 
     //empties
@@ -408,12 +477,36 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         }
     }
 
+    public void addEmpty(int index, E empty) {
+        if (empty != null) {
+            this.empties.add(index, empty);
+            if (isEmptyData())
+                notifyItemInserted(toEmptyPosition(index));
+        }
+    }
+
     public void clearEmpties() {
         if (!empties.isEmpty()) {
             empties.clear();
             if (isEmptyData())
                 notifyDataSetChanged();
         }
+    }
+
+    public void removeEmpty(int index) {
+        if (index < 0 || index >= getEmptySize())
+            return;
+        int pos = toEmptyPosition(index);
+        empties.remove(index);
+        notifyItemRemoved(pos);
+    }
+
+    public void updateEmpty(int index, E empty) {
+        if (index < 0 || index >= getEmptySize())
+            return;
+        if (empty != null)
+            this.empties.set(index, empty);
+        notifyItemChanged(toEmptyPosition(index));
     }
 
 

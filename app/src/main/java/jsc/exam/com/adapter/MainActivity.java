@@ -1,5 +1,6 @@
 package jsc.exam.com.adapter;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +36,7 @@ import jsc.exam.com.adapter.fragments.AboutFragment;
 import jsc.exam.com.adapter.fragments.CheckableFragment;
 import jsc.exam.com.adapter.fragments.OptionalFragment;
 import jsc.exam.com.adapter.fragments.PullToRefreshFragment;
+import jsc.exam.com.adapter.fragments.SimpleAdapterFragment;
 import jsc.exam.com.adapter.fragments.SwipeRefreshFragment;
 import jsc.exam.com.adapter.retrofit.ApiService;
 import jsc.exam.com.adapter.retrofit.CustomHttpClient;
@@ -49,7 +52,6 @@ import retrofit2.Retrofit;
 public class MainActivity extends BaseActivity {
 
     SharedPreferences sharedPreferences = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,8 @@ public class MainActivity extends BaseActivity {
         if (curTime - lastCheckUpdateTimeStamp > 2 * 60 * 60_000) {
             checkUpdate();
         }
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0x100);
     }
 
     private void toNewActivity(ClassItem item) {
@@ -111,6 +115,7 @@ public class MainActivity extends BaseActivity {
 
     private List<ClassItem> getClassItems() {
         List<ClassItem> classItems = new ArrayList<>();
+        classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "SimpleAdapter", SimpleAdapterFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "SwipeRefresh", SwipeRefreshFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "PullToRefresh", PullToRefreshFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "Optional", OptionalFragment.class, false));

@@ -18,9 +18,9 @@ import java.util.Random;
 import jsc.exam.com.adapter.R;
 import jsc.exam.com.adapter.bean.ClassItem;
 import jsc.exam.com.adapter.utils.CompatResourceUtils;
+import jsc.kit.adapter.SimpleAdapter2;
+import jsc.kit.adapter.SimpleItemClickListener2;
 import jsc.kit.adapter.refresh.PullToRefreshRecyclerView;
-import jsc.kit.adapter.SimpleAdapter3;
-import jsc.kit.adapter.SimpleItemClickListener3;
 import jsc.kit.adapter.SpaceItemDecoration;
 
 /**
@@ -33,7 +33,7 @@ import jsc.kit.adapter.SpaceItemDecoration;
 public class PullToRefreshFragment extends BaseFragment {
 
     PullToRefreshRecyclerView pullToRefreshRecyclerView;
-    SimpleAdapter3<ClassItem> adapter3 = null;
+    SimpleAdapter2<Object, ClassItem, String> adapter = null;
 
     @Nullable
     @Override
@@ -61,14 +61,19 @@ public class PullToRefreshFragment extends BaseFragment {
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_16),
                 CompatResourceUtils.getDimensionPixelSize(this, R.dimen.space_2)
         ));
-        adapter3 = new SimpleAdapter3<ClassItem>(R.layout.main_list_item_layout) {
+        adapter = new SimpleAdapter2<Object, ClassItem, String>(R.layout.main_list_item_layout) {
             @Override
             protected void onBindDataViewHolder(@NonNull BaseViewHolder holder, int position, ClassItem dataBean) {
                 holder.setText(R.id.tv_label, dataBean.getLabel())
                         .setVisibility(R.id.red_dot_view, View.GONE);
             }
+
+            @Override
+            protected void onBindFooterViewHolder(@NonNull BaseViewHolder holder, int position, String footerBean) {
+                holder.setText(R.id.tv_footer, footerBean);
+            }
         };
-        adapter3.setOnItemClickListener(new SimpleItemClickListener3<ClassItem>() {
+        adapter.setOnItemClickListener(new SimpleItemClickListener2<Object, ClassItem, String>() {
             @Override
             public void onDataItemClick(@NonNull View dataItemView, int position, ClassItem dataBean) {
                 Toast.makeText(dataItemView.getContext(), "clicked:" + dataBean.getLabel(), Toast.LENGTH_SHORT).show();
@@ -79,8 +84,9 @@ public class PullToRefreshFragment extends BaseFragment {
                 pullToRefreshRecyclerView.refresh();
             }
         });
-        adapter3.bindRecyclerView(recyclerView);
-        adapter3.addEmpty(new Object());
+        adapter.setFooterLayoutId(R.layout.list_footer_layout);
+        adapter.bindRecyclerView(recyclerView);
+        adapter.addEmpty(new Object());
         return root;
     }
 
@@ -108,11 +114,16 @@ public class PullToRefreshFragment extends BaseFragment {
                 }
 
                 if (pullToRefreshRecyclerView.isFirstPage()) {
-                    adapter3.setData(items);
+                    adapter.removeFooter(0);
+                    adapter.setData(items);
                 } else {
-                    adapter3.addData(items);
+                    adapter.addData(items);
                 }
-                pullToRefreshRecyclerView.setHaveMore(items.size() >= pullToRefreshRecyclerView.getPageSize());
+                boolean hasMore = items.size() >= pullToRefreshRecyclerView.getPageSize();
+                pullToRefreshRecyclerView.setHaveMore(hasMore);
+                if (!hasMore) {
+                    adapter.addFooter("已全部加载");
+                }
             }
         }, 50 + random.nextInt(2000));
     }
