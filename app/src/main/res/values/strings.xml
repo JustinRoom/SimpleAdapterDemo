@@ -2,6 +2,6 @@
     <string name="app_name" translatable="false">SimpleAdapter</string>
     <string name="app_update_content" translatable="false">
         \n1、优化BaseHeaderFooterAdapter.
-        \n2、新增快速实现RecyclerView单选、复选示例.
+        \n2、修复点击和长按事件无效Bug。
     </string>
 </resources>

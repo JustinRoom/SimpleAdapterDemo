@@ -6,13 +6,13 @@
     "apkInfo": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 10,
-      "versionName": "0.2.6",
+      "versionCode": 12,
+      "versionName": "0.3.0",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、优化BaseHeaderFooterAdapter.\n2、新增快速实现RecyclerView单选、复选示例."
+      "content": "\n1、优化BaseHeaderFooterAdapter.\n2、修复点击和长按事件无效Bug。"
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}
