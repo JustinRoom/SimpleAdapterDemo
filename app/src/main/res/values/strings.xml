@@ -2,5 +2,6 @@
     <string name="app_name" translatable="false">SimpleAdapter</string>
     <string name="app_update_content" translatable="false">
         \n1、优化PullToRefreshRecyclerView.
+        \n2、优化BaseHeaderFooterAdapter.
     </string>
 </resources>

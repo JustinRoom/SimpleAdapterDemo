@@ -456,7 +456,9 @@ public <H extends IHeader> void setHeader(@NonNull H refresh)
 ### 4、release log
 
 #### version:0.3.2
-1、优化PullToRefreshRecyclerView。
+1、优化BaseHeaderFooterAdapter.
+
+2、优化PullToRefreshRecyclerView。
 + 新增方法：`public void setLayoutManager(@Nullable RecyclerView.LayoutManager layout)`
 + 类`IHeader`重命名为`IRefresh`
 + 类`IFooter`重命名为`ILoadMore`
