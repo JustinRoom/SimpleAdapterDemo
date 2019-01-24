@@ -166,7 +166,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 
 [BaseHeaderFooterAdapter](/adapterLibrary/src/main/java/jsc/kit/adapter/BaseHeaderFooterAdapter.java)通用方法： 
 
- //header
+ //refresh
  
 `public List<H> getHeaders()`  
 `public int getHeaderSize()`  
@@ -175,7 +175,7 @@ implementation 'jsc.kit.adapter:adapter-component:_latestVersion'
 `public H getHeaderAt(int position)`  
 `public void setHeaders(List<H> headers)`  
 `public void addHeaders(List<H> headers)`  
-`public void addHeader(H header)`  
+`public void addHeader(H refresh)`  
 `public void clearHeaders()`  
 
 //data
@@ -238,7 +238,7 @@ public interface OnItemClickListener<H, D, F, E> {
 `itemView`之`child view`的点击事件监听
 ```
 public interface OnItemChildClickListener<H, D, F, E> {
-    //header child view点击监听
+    //refresh child view点击监听
     void onHeaderItemChildClick(@NonNull View headerChild, int position, H headerBean);
     //data child view点击监听
     void onDataItemChildClick(@NonNull View dataItemChild, int position, D dataBean);
@@ -266,7 +266,7 @@ public interface OnItemLongClickListener<H, D, F, E> {
 `itemView`之`child view`的长按事件监听
 ```
 public interface OnItemChildLongClickListener<H, D, F, E> {
-    //header child view长按监听
+    //refresh child view长按监听
     boolean onHeaderItemChildLongClick(@NonNull View headerChild, int position, H headerBean);
     //data child view长按监听
     boolean onDataItemChildLongClick(@NonNull View dataItemChild, int position, D dataBean);
@@ -357,12 +357,12 @@ public interface OnItemChildLongClickListener<H, D, F, E> {
 
 > 设置刷新逻辑监听
 ```
-public <H extends IHeader> void setHeader(@NonNull H header)
+public <H extends IHeader> void setHeader(@NonNull H refresh)
 ```
 
 > 实现刷新逻辑
 ```
-        IHeader header =  new IHeader() {
+        IHeader refresh =  new IHeader() {
 
             @Override
             public void initChildren(@NonNull View headerView) {
@@ -414,7 +414,7 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 
 > 设置加载更多逻辑监听
 ```
-public <H extends IHeader> void setHeader(@NonNull H header)
+public <H extends IHeader> void setHeader(@NonNull H refresh)
 ```
 
 > 实现加载更多逻辑
@@ -454,6 +454,14 @@ public <H extends IHeader> void setHeader(@NonNull H header)
 ```
 
 ### 4、release log
+
+#### version:0.3.2
+1、优化PullToRefreshRecyclerView。
++ 新增方法：`public void setLayoutManager(@Nullable RecyclerView.LayoutManager layout)`
++ 类`IHeader`重命名为`IRefresh`
++ 类`IFooter`重命名为`ILoadMore`
++ 方法`void setHeader(@NonNull H header)`改为`void setRefresh(@NonNull R refresh)`
++ 方法`void setFooter(@NonNull F footer)`改为`void setLoadMore(@NonNull L loadMore)`
 
 #### version:0.3.0
 1、优化BaseHeaderFooterAdapter.  

@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_selector"
             android:gravity="center"
-            android:text="+header"
+            android:text="+refresh"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_marginTop="@dimen/space_4"
             android:background="@drawable/button_selector"
             android:gravity="center"
-            android:text="-header"
+            android:text="-refresh"
             android:textColor="@android:color/white" />
 
         <TextView

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Property;
@@ -27,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import jsc.kit.adapter.R;
 import jsc.kit.adapter.SimpleAnimatorListener;
 
 /**
@@ -119,11 +119,11 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     private int state = INIT;
     private ObjectAnimator animator = null;
 
-    private View headerView;
+    private View refreshView;
     private RecyclerView recyclerView;
-    private View footerView;
-    private IHeader header = null;
-    private IFooter footer = null;
+    private View loadMoreView;
+    private IRefresh refresh = null;
+    private ILoadMore footer = null;
 
     private VelocityTracker velocityTracker;
     private int mMinimumVelocity;
@@ -172,8 +172,8 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     }
 
     private void initView(Context context) {
-        inflate(context, R.layout.recycler_pull_to_refresh_recycler_view, this);
-        recyclerView = findViewById(R.id.recycler_view);
+        inflate(context, jsc.kit.adapter.R.layout.recycler_pull_to_refresh_recycler_view, this);
+        recyclerView = findViewById(jsc.kit.adapter.R.id.recycler_view);
 
         final ViewConfiguration viewConfiguration = ViewConfiguration.get(context);
         mMinimumVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
@@ -182,53 +182,53 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     }
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PullToRefreshRecyclerView, defStyleAttr, 0);
-        int headerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvHeaderLayout, -1);
-        int footerLayoutId = a.getResourceId(R.styleable.PullToRefreshRecyclerView_prvFooterLayout, -1);
+        TypedArray a = context.obtainStyledAttributes(attrs, jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView, defStyleAttr, 0);
+        int refreshLayoutId = a.getResourceId(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvRefreshLayout, -1);
+        int loadMoreLayoutId = a.getResourceId(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvLoadMoreLayout, -1);
 
         //refresh text
-        pullDownToRefreshText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvPullDownToRefreshText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvPullDownToRefreshText) :
-                getResources().getString(R.string.recycler_default_pull_down_to_refresh);
-        releaseToRefreshText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvReleaseToRefreshText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvReleaseToRefreshText) :
-                getResources().getString(R.string.recycler_default_release_to_refresh);
-        refreshingText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvRefreshingText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvRefreshingText) :
-                getResources().getString(R.string.recycler_default_refreshing);
-        refreshCompletedText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvRefreshCompletedText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvRefreshCompletedText) :
-                getResources().getString(R.string.recycler_default_refresh_completed);
+        pullDownToRefreshText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvPullDownToRefreshText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvPullDownToRefreshText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_pull_down_to_refresh);
+        releaseToRefreshText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvReleaseToRefreshText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvReleaseToRefreshText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_release_to_refresh);
+        refreshingText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvRefreshingText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvRefreshingText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_refreshing);
+        refreshCompletedText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvRefreshCompletedText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvRefreshCompletedText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_refresh_completed);
 
         //load more text
-        pullUpToLoadMoreText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvPullUpToLoadMoreText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvPullUpToLoadMoreText) :
-                getResources().getString(R.string.recycler_default_pull_up_to_load_more);
-        releaseToLoadMoreText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvReleaseToLoadMoreText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvReleaseToLoadMoreText) :
-                getResources().getString(R.string.recycler_default_release_to_load_more);
-        loadingMoreText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvLoadingMoreText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvLoadingMoreText) :
-                getResources().getString(R.string.recycler_default_loading_more);
-        loadMoreCompletedText = a.hasValue(R.styleable.PullToRefreshRecyclerView_prvLoadMoreCompletedText) ?
-                a.getString(R.styleable.PullToRefreshRecyclerView_prvLoadMoreCompletedText) :
-                getResources().getString(R.string.recycler_default_load_more_completed);
+        pullUpToLoadMoreText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvPullUpToLoadMoreText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvPullUpToLoadMoreText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_pull_up_to_load_more);
+        releaseToLoadMoreText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvReleaseToLoadMoreText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvReleaseToLoadMoreText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_release_to_load_more);
+        loadingMoreText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvLoadingMoreText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvLoadingMoreText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_loading_more);
+        loadMoreCompletedText = a.hasValue(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvLoadMoreCompletedText) ?
+                a.getString(jsc.kit.adapter.R.styleable.PullToRefreshRecyclerView_prvLoadMoreCompletedText) :
+                getResources().getString(jsc.kit.adapter.R.string.recycler_default_load_more_completed);
         a.recycle();
 
-        if (headerLayoutId == -1) {
-            headerView = LayoutInflater.from(context).inflate(R.layout.recycler_default_header_view, this, false);
-            setHeader(createDefaultHeader());
+        if (refreshLayoutId == -1) {
+            refreshView = LayoutInflater.from(context).inflate(jsc.kit.adapter.R.layout.recycler_default_header_view, this, false);
+            setRefresh(createDefaultHeader());
         } else {
-            headerView = LayoutInflater.from(context).inflate(headerLayoutId, this, false);
+            refreshView = LayoutInflater.from(context).inflate(refreshLayoutId, this, false);
         }
-        if (footerLayoutId == -1) {
-            footerView = LayoutInflater.from(context).inflate(R.layout.recycler_default_footer_view, this, false);
-            setFooter(createDefaultFooter());
+        if (loadMoreLayoutId == -1) {
+            loadMoreView = LayoutInflater.from(context).inflate(jsc.kit.adapter.R.layout.recycler_default_footer_view, this, false);
+            setLoadMore(createDefaultFooter());
         } else {
-            footerView = LayoutInflater.from(context).inflate(footerLayoutId, this, false);
+            loadMoreView = LayoutInflater.from(context).inflate(loadMoreLayoutId, this, false);
         }
-        addView(headerView, 0);
-        addView(footerView);
+        addView(refreshView, 0);
+        addView(loadMoreView);
 
 
         setHaveMore(false);
@@ -238,15 +238,15 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
-        headerHeight = headerView.getMeasuredHeight();
-        footerHeight = footerView.getMeasuredHeight();
+        headerHeight = refreshView.getMeasuredHeight();
+        footerHeight = loadMoreView.getMeasuredHeight();
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        headerView.layout(0, 0 - headerView.getMeasuredHeight(), getMeasuredWidth(), 0);
-        recyclerView.layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
-        footerView.layout(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight() + footerView.getMeasuredHeight());
+        refreshView.layout(0, 0 - refreshView.getMeasuredHeight(), getMeasuredWidth(), 0);
+        recyclerView.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingBottom());
+        loadMoreView.layout(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight() + loadMoreView.getMeasuredHeight());
     }
 
     @Override
@@ -361,7 +361,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
         if (getScrollY() < 0) {
             if (!isRefreshEnable() || isRefreshing()) {
-                header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
+                refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
                 return;
             }
 
@@ -372,7 +372,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 //pull down to refresh
                 setState(PULL_DOWN_TO_REFRESH);
             }
-            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
+            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
         } else if (getScrollY() > 0) {
             if (!isLoadMoreEnable() || isLoadingMore()) {
                 footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
@@ -388,7 +388,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
             footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
         } else {
-            header.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
+            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
             footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
         }
 
@@ -447,7 +447,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                         case REFRESH_COMPLETED:
                             setState(INIT);
                             lastRefreshTimeStamp = System.currentTimeMillis();
-                            header.updateLastRefreshTime(lastRefreshTimeStamp);
+                            refresh.updateLastRefreshTime(lastRefreshTimeStamp);
                             break;
                         case LOAD_MORE_COMPLETED:
                             setState(INIT);
@@ -495,21 +495,21 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         this.state = state;
         switch (state) {
             case INIT:
-                header.onUpdateState(state, "");
+                refresh.onUpdateState(state, "");
                 footer.onUpdateState(state, "");
                 break;
 
             case PULL_DOWN_TO_REFRESH:
-                header.onUpdateState(state, pullDownToRefreshText);
+                refresh.onUpdateState(state, pullDownToRefreshText);
                 break;
             case RELEASE_TO_REFRESH:
-                header.onUpdateState(state, releaseToRefreshText);
+                refresh.onUpdateState(state, releaseToRefreshText);
                 break;
             case REFRESHING:
-                header.onUpdateState(state, refreshingText);
+                refresh.onUpdateState(state, refreshingText);
                 break;
             case REFRESH_COMPLETED:
-                header.onUpdateState(state, refreshCompletedText);
+                refresh.onUpdateState(state, refreshCompletedText);
                 break;
 
             case PULL_UP_TO_LOAD_MORE:
@@ -552,6 +552,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
+    }
+
+    public void setLayoutManager(@Nullable RecyclerView.LayoutManager layout) {
+        recyclerView.setLayoutManager(layout);
     }
 
     public void initializeParameters(int startPage, int pageSize) {
@@ -613,7 +617,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     public void setRefreshEnable(boolean enable) {
         this.refreshEnable = enable;
-        headerView.setVisibility(enable ? VISIBLE : INVISIBLE);
+        refreshView.setVisibility(enable ? VISIBLE : INVISIBLE);
         if (!enable)
             setState(INIT);
     }
@@ -624,7 +628,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     public void setLoadMoreEnable(boolean enable) {
         this.loadMoreEnable = enable;
-        footerView.setVisibility(enable ? VISIBLE : INVISIBLE);
+        loadMoreView.setVisibility(enable ? VISIBLE : INVISIBLE);
         if (!enable)
             setState(INIT);
     }
@@ -636,25 +640,25 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     public void setHaveMore(boolean haveMore) {
         this.haveMore = haveMore;
         if (isLoadMoreEnable())
-            footerView.setVisibility(haveMore ? VISIBLE : INVISIBLE);
+            loadMoreView.setVisibility(haveMore ? VISIBLE : INVISIBLE);
     }
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
         this.onRefreshListener = onRefreshListener;
     }
 
-    public <H extends IHeader> void setHeader(@NonNull H header) {
-        this.header = header;
-        this.header.initChildren(headerView);
+    public <R extends IRefresh> void setRefresh(@NonNull R refresh) {
+        this.refresh = refresh;
+        this.refresh.initChildren(refreshView);
     }
 
-    public <F extends IFooter> void setFooter(@NonNull F footer) {
-        this.footer = footer;
-        this.footer.initChildren(footerView);
+    public <L extends ILoadMore> void setLoadMore(@NonNull L loadMore) {
+        this.footer = loadMore;
+        this.footer.initChildren(loadMoreView);
     }
 
-    private IHeader createDefaultHeader() {
-        return new IHeader() {
+    private IRefresh createDefaultHeader() {
+        return new IRefresh() {
             ProgressBar headerProgressBar;
             ImageView ivHeaderIcon;
             TextView tvLastRefreshTime;
@@ -663,10 +667,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
             @Override
             public void initChildren(@NonNull View headerView) {
-                headerProgressBar = headerView.findViewById(R.id.recycler_header_progress_bar);
-                ivHeaderIcon = headerView.findViewById(R.id.recycler_iv_header_icon);
-                tvLastRefreshTime = headerView.findViewById(R.id.recycler_tv_last_refresh_time);
-                tvRefreshTips = headerView.findViewById(R.id.recycler_tv_refresh_tips);
+                headerProgressBar = headerView.findViewById(jsc.kit.adapter.R.id.recycler_header_progress_bar);
+                ivHeaderIcon = headerView.findViewById(jsc.kit.adapter.R.id.recycler_iv_header_icon);
+                tvLastRefreshTime = headerView.findViewById(jsc.kit.adapter.R.id.recycler_tv_last_refresh_time);
+                tvRefreshTips = headerView.findViewById(jsc.kit.adapter.R.id.recycler_tv_refresh_tips);
 
                 headerProgressBar.setVisibility(GONE);
             }
@@ -680,7 +684,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                     }
                     tvLastRefreshTime.setText(String.format(
                             Locale.CHINA,
-                            getResources().getString(R.string.recycler_default_last_refresh_time),
+                            getResources().getString(jsc.kit.adapter.R.string.recycler_default_last_refresh_time),
                             dateFormat.format(new Date(lastRefreshTimeStamp))
                     ));
                 }
@@ -715,15 +719,15 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         };
     }
 
-    private IFooter createDefaultFooter() {
-        return new IFooter() {
+    private ILoadMore createDefaultFooter() {
+        return new ILoadMore() {
             ProgressBar footerProgressBar;
             TextView tvLoadMoreTips;
 
             @Override
             public void initChildren(@NonNull View footerView) {
-                footerProgressBar = footerView.findViewById(R.id.recycler_footer_progress_bar);
-                tvLoadMoreTips = footerView.findViewById(R.id.recycler_tv_load_more_tips);
+                footerProgressBar = footerView.findViewById(jsc.kit.adapter.R.id.recycler_footer_progress_bar);
+                tvLoadMoreTips = footerView.findViewById(jsc.kit.adapter.R.id.recycler_tv_load_more_tips);
 
                 footerProgressBar.setVisibility(GONE);
             }
@@ -752,8 +756,8 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     public interface OnRefreshListener {
 
-        void onRefresh(@NonNull Context context, int currentPage, int pageSize);
+        void onRefresh(@NonNull Context context, int nextPage, int pageSize);
 
-        void onLoadMore(@NonNull Context context, int currentPage, int pageSize);
+        void onLoadMore(@NonNull Context context, int nextPage, int pageSize);
     }
 }

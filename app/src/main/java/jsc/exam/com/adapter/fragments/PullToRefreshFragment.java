@@ -45,13 +45,13 @@ public class PullToRefreshFragment extends BaseFragment {
 //        pullToRefreshRecyclerView.setLoadMoreEnable(false);
         pullToRefreshRecyclerView.setOnRefreshListener(new PullToRefreshRecyclerView.OnRefreshListener() {
             @Override
-            public void onRefresh(@NonNull Context context, int currentPage, int pageSize) {
+            public void onRefresh(@NonNull Context context, int nextPage, int pageSize) {
                 index = -1;
                 loadNetData();
             }
 
             @Override
-            public void onLoadMore(@NonNull Context context, int currentPage, int pageSize) {
+            public void onLoadMore(@NonNull Context context, int nextPage, int pageSize) {
                 loadNetData();
             }
         });

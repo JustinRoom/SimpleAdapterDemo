@@ -10,7 +10,7 @@ import android.view.View;
  *
  * @author jsc
  */
-public interface IHeader {
+public interface IRefresh {
 
     void initChildren(@NonNull View headerView);
     void updateLastRefreshTime(long lastRefreshTimeStamp);

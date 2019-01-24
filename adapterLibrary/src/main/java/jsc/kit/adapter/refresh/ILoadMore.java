@@ -10,7 +10,7 @@ import android.view.View;
  *
  * @author jsc
  */
-public interface IFooter {
+public interface ILoadMore {
 
     void initChildren(@NonNull View footerView);
 

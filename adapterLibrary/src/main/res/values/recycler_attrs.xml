@@ -6,8 +6,8 @@
     </declare-styleable>
 
     <declare-styleable name="PullToRefreshRecyclerView">
-        <attr name="prvHeaderLayout" format="reference"/>
-        <attr name="prvFooterLayout" format="reference"/>
+        <attr name="prvRefreshLayout" format="reference"/>
+        <attr name="prvLoadMoreLayout" format="reference"/>
         <attr name="prvPullDownToRefreshText" format="string"/>
         <attr name="prvReleaseToRefreshText" format="string"/>
         <attr name="prvRefreshingText" format="string"/>
