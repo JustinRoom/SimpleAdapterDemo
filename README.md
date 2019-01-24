@@ -455,6 +455,9 @@ public <H extends IHeader> void setHeader(@NonNull H refresh)
 
 ### 4、release log
 
+#### version:0.3.3
+1、修复PullToRefreshRecyclerView加载完成后项目滑动bug
+
 #### version:0.3.2
 1、优化BaseHeaderFooterAdapter.
 

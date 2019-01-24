@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -230,8 +231,13 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         addView(refreshView, 0);
         addView(loadMoreView);
 
-
+        setPadding(getPaddingStart(), getPaddingTop(), getPaddingEnd(), getPaddingBottom());
         setHaveMore(false);
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        recyclerView.setPadding(left, top, right, bottom);
     }
 
     @Override
@@ -245,7 +251,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         refreshView.layout(0, 0 - refreshView.getMeasuredHeight(), getMeasuredWidth(), 0);
-        recyclerView.layout(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getMeasuredHeight() - getPaddingBottom());
+        recyclerView.layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
         loadMoreView.layout(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight() + loadMoreView.getMeasuredHeight());
     }
 
@@ -374,7 +380,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             }
             refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
         } else if (getScrollY() > 0) {
-            if (!isLoadMoreEnable() || isLoadingMore()) {
+            if (!isLoadMoreEnable() || isLoadingMore() || !isHaveMore()) {
                 footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
                 return;
             }
@@ -391,8 +397,6 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
             footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
         }
-
-
     }
 
     private void executeUpOrCancelMotionEvent(int velocity) {
@@ -420,6 +424,9 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
     private void executeRebound(int destinationScrollY) {
         int scrollYDistance = destinationScrollY - getScrollY();
+        if (scrollYDistance == 0)
+            return;
+
         int duration = Math.abs(scrollYDistance);
         duration = Math.max(200, duration);
         duration = Math.min(500, duration);
@@ -492,6 +499,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     }
 
     private void setState(@State int state) {
+        Log.i(TAG, "setState: " + Integer.toHexString(state));
         this.state = state;
         switch (state) {
             case INIT:
