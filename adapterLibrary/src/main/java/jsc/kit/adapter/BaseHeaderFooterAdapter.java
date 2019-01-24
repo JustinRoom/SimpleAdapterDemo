@@ -79,7 +79,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultItemClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ensureBindedRecyclerView();
+                    ensureBoundedRecyclerView();
                     int position = recyclerView.getChildAdapterPosition(v) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
@@ -112,7 +112,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultItemLongClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    ensureBindedRecyclerView();
+                    ensureBoundedRecyclerView();
                     int position = recyclerView.getChildAdapterPosition(v) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
                     switch (viewType) {
@@ -138,7 +138,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultChildClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ensureBindedRecyclerView();
+                    ensureBoundedRecyclerView();
                     View itemView = recyclerView.findContainingItemView(v);
                     int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
@@ -172,7 +172,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             defaultChildLongClickListener = new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    ensureBindedRecyclerView();
+                    ensureBoundedRecyclerView();
                     View itemView = recyclerView.findContainingItemView(v);
                     int position = itemView == null ? -1 : recyclerView.getChildAdapterPosition(itemView) - getCustomHeaderSize();
                     int viewType = getItemViewType(position);
@@ -246,14 +246,14 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     public void addHeader(H header) {
         if (header != null) {
             headers.add(header);
-            notifyItemInserted(getHeaderSize());
+            notifyItemInserted(toCustomPosition(getHeaderSize()));
         }
     }
 
     public void addHeader(int index, H header) {
         if (header != null) {
             headers.add(index, header);
-            notifyItemInserted(toHeaderPosition(index));
+            notifyItemInserted(toCustomPosition(toHeaderPosition(index)));
         }
     }
 
@@ -269,7 +269,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         int pos = toHeaderPosition(index);
         headers.remove(index);
-        notifyItemRemoved(pos);
+        notifyItemRemoved(toCustomPosition(pos));
     }
 
     public void updateHeader(int index, H header) {
@@ -277,7 +277,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         if (header != null)
             headers.set(index, header);
-        notifyItemChanged(toHeaderPosition(index));
+        notifyItemChanged(toCustomPosition(toHeaderPosition(index)));
     }
 
     //data
@@ -323,14 +323,14 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     public void addData(D data) {
         if (data != null) {
             this.data.add(data);
-            notifyItemInserted(getHeaderSize() + getDataSize());
+            notifyItemInserted(toCustomPosition(getHeaderSize() + getDataSize()));
         }
     }
 
     public void addData(int index, D data) {
         if (data != null) {
             this.data.add(index, data);
-            notifyItemInserted(toDataPosition(index));
+            notifyItemInserted(toCustomPosition(toDataPosition(index)));
         }
     }
 
@@ -346,7 +346,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         int pos = toDataPosition(index);
         data.remove(index);
-        notifyItemRemoved(pos);
+        notifyItemRemoved(toCustomPosition(pos));
     }
 
     public void updateData(int index, D data) {
@@ -354,7 +354,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         if (data != null)
             this.data.set(index, data);
-        notifyItemChanged(toDataPosition(index));
+        notifyItemChanged(toCustomPosition(toDataPosition(index)));
     }
 
     //footer
@@ -400,14 +400,14 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     public void addFooter(F footer) {
         if (footer != null) {
             this.footers.add(footer);
-            notifyItemInserted(getItemCount());
+            notifyItemInserted(toCustomPosition(getItemCount()));
         }
     }
 
     public void addFooter(int index, F footer) {
         if (footer != null) {
             this.footers.add(index, footer);
-            notifyItemInserted(toFooterPosition(index));
+            notifyItemInserted(toCustomPosition(toFooterPosition(index)));
         }
     }
 
@@ -423,7 +423,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         int pos = toFooterPosition(index);
         footers.remove(index);
-        notifyItemRemoved(pos);
+        notifyItemRemoved(toCustomPosition(pos));
     }
 
     public void updateFooter(int index, F footer) {
@@ -431,7 +431,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         if (footer != null)
             this.footers.set(index, footer);
-        notifyItemChanged(toFooterPosition(index));
+        notifyItemChanged(toCustomPosition(toFooterPosition(index)));
     }
 
     //empties
@@ -450,10 +450,6 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
 
     public int toEmptyPosition(int index) {
         return getHeaderSize() + index;
-    }
-
-    protected int getCustomHeaderSize(){
-        return 0;
     }
 
     @Nullable
@@ -484,7 +480,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         if (empty != null) {
             this.empties.add(empty);
             if (isEmptyData())
-                notifyItemInserted(getItemCount());
+                notifyItemInserted(toCustomPosition(getItemCount()));
         }
     }
 
@@ -492,7 +488,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         if (empty != null) {
             this.empties.add(index, empty);
             if (isEmptyData())
-                notifyItemInserted(toEmptyPosition(index));
+                notifyItemInserted(toCustomPosition(toEmptyPosition(index)));
         }
     }
 
@@ -509,7 +505,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         int pos = toEmptyPosition(index);
         empties.remove(index);
-        notifyItemRemoved(pos);
+        notifyItemRemoved(toCustomPosition(pos));
     }
 
     public void updateEmpty(int index, E empty) {
@@ -517,7 +513,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             return;
         if (empty != null)
             this.empties.set(index, empty);
-        notifyItemChanged(toEmptyPosition(index));
+        notifyItemChanged(toCustomPosition(toEmptyPosition(index)));
     }
 
 
@@ -534,9 +530,17 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         recyclerView.setAdapter(this);
     }
 
-    private void ensureBindedRecyclerView(){
+    private void ensureBoundedRecyclerView(){
         if (recyclerView == null)
             throw new IllegalStateException("Please bind RecyclerView first by calling method bindRecyclerView(@NonNull RecyclerView recyclerView).");
+    }
+
+    protected int getCustomHeaderSize(){
+        return 0;
+    }
+
+    public int toCustomPosition(int position) {
+        return position + getCustomHeaderSize();
     }
 
     public boolean isEmptyData() {
