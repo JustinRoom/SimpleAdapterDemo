@@ -80,8 +80,6 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
             int rowIndex = viewIndex / spanCount;
             int columnIndex = viewIndex % spanCount;
-            if (columnIndex > 0)
-                rowIndex++;
 
             if (!showFirstTop && rowIndex == 0)
                 outRect.top = 0;
