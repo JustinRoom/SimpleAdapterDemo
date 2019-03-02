@@ -65,6 +65,7 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
     private List<D> data = new ArrayList<>();
     private List<F> footers = new ArrayList<>();
     private List<E> empties = new ArrayList<>();
+    private OnCreateViewHolderListener onCreateViewHolderListener = null;
     private OnItemClickListener<H, D, F, E> onItemClickListener = null;
     private OnItemLongClickListener<H, D, F, E> onItemLongClickListener = null;
     private OnItemChildClickListener<H, D, F, E> onItemChildClickListener = null;
@@ -516,6 +517,13 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         notifyItemChanged(toCustomPosition(toEmptyPosition(index)));
     }
 
+    public OnCreateViewHolderListener getOnCreateViewHolderListener() {
+        return onCreateViewHolderListener;
+    }
+
+    public void addOnCreateViewHolderListener(OnCreateViewHolderListener onCreateViewHolderListener) {
+        this.onCreateViewHolderListener = onCreateViewHolderListener;
+    }
 
     public void addOnChildClickListener(@NonNull VH holder, @IdRes int id) {
         holder.addOnChildClickListener(id, onItemChildClickListener == null ? null : getDefaultChildClickListener());

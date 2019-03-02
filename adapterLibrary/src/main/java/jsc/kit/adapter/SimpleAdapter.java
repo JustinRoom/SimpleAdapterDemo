@@ -27,28 +27,47 @@ public class SimpleAdapter<H, D, F, E> extends BaseHeaderFooterAdapter<H, D, F, 
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        BaseViewHolder holder = null;
         switch (viewType) {
             case TYPE_HEADER:
                 if (getHeaderLayoutId() == -1)
                     throw new IllegalArgumentException(getClass().getSimpleName() + " : please set header layout first.");
-                return new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getHeaderLayoutId(), viewGroup, false));
+                holder = new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getHeaderLayoutId(), viewGroup, false));
+                if (getOnCreateViewHolderListener() != null) {
+                    getOnCreateViewHolderListener().onCreateHeaderViewHolder(holder);
+                }
+                break;
             case TYPE_DATA:
                 if (getDataLayoutId() == -1)
                     throw new IllegalArgumentException(getClass().getSimpleName() + " : please set footer layout first.");
-                return new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getDataLayoutId(), viewGroup, false));
+                holder = new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getDataLayoutId(), viewGroup, false));
+                if (getOnCreateViewHolderListener() != null) {
+                    getOnCreateViewHolderListener().onCreateDataViewHolder(holder);
+                }
+                break;
             case TYPE_FOOTER:
                 if (getFooterLayoutId() == -1)
                     throw new IllegalArgumentException(getClass().getSimpleName() + " : please set footer layout first.");
-                return new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getFooterLayoutId(), viewGroup, false));
+                holder = new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getFooterLayoutId(), viewGroup, false));
+                if (getOnCreateViewHolderListener() != null) {
+                    getOnCreateViewHolderListener().onCreateFooterViewHolder(holder);
+                }
+                break;
             case TYPE_EMPTY:
-                return new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getEmptyLayoutId() == -1 ? R.layout.recycler_default_empty_list_layout : getEmptyLayoutId(), viewGroup, false));
+                holder = new BaseViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(getEmptyLayoutId() == -1 ? R.layout.recycler_default_empty_list_layout : getEmptyLayoutId(), viewGroup, false));
+                if (getOnCreateViewHolderListener() != null) {
+                    getOnCreateViewHolderListener().onCreateEmptyViewHolder(holder);
+                }
+                break;
             default:
                 TextView textView = new TextView(viewGroup.getContext());
                 textView.setTextColor(Color.RED);
                 textView.setGravity(Gravity.CENTER);
                 textView.setText("Unknown view type");
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                return new BaseViewHolder(textView);
+                holder = new BaseViewHolder(textView);
+                break;
         }
+        return holder;
     }
 }
