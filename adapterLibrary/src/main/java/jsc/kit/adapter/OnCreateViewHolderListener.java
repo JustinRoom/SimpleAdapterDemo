@@ -1,7 +1,6 @@
 package jsc.kit.adapter;
 
 import android.support.annotation.NonNull;
-import android.view.View;
 
 /**
  * <br>Email:1006368252@qq.com
