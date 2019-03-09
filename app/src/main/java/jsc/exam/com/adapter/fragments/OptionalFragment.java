@@ -18,7 +18,7 @@ import jsc.exam.com.adapter.bean.CustomBean;
 import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter3;
 import jsc.kit.adapter.SimpleItemClickListener3;
-import jsc.kit.adapter.SpaceItemDecoration;
+import jsc.kit.adapter.decoration.SpaceItemDecoration;
 
 /**
  * 快速实现单选示例

@@ -21,7 +21,7 @@ import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter2;
 import jsc.kit.adapter.SimpleItemClickListener2;
 import jsc.kit.adapter.refresh.PullToRefreshRecyclerView;
-import jsc.kit.adapter.SpaceItemDecoration;
+import jsc.kit.adapter.decoration.SpaceItemDecoration;
 
 /**
  * <br>Email:1006368252@qq.com

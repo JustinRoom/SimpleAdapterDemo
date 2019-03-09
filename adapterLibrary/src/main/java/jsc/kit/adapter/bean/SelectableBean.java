@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public class SelectableBean implements Serializable {
 
-    private boolean selected;
+    private transient boolean selected;
 
     public boolean isSelected() {
         return selected;

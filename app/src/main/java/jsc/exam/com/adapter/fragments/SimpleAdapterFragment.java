@@ -20,7 +20,7 @@ import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter;
 import jsc.kit.adapter.SimpleItemChildClickListener;
 import jsc.kit.adapter.SimpleItemClickListener;
-import jsc.kit.adapter.SpaceItemDecoration;
+import jsc.kit.adapter.decoration.SpaceItemDecoration;
 
 /**
  * 快速实现单选示例

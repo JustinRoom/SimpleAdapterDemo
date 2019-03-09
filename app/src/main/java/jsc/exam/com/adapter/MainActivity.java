@@ -44,7 +44,7 @@ import jsc.exam.com.adapter.retrofit.CustomRetrofit;
 import jsc.exam.com.adapter.utils.CompatResourceUtils;
 import jsc.kit.adapter.SimpleAdapter3;
 import jsc.kit.adapter.SimpleItemClickListener3;
-import jsc.kit.adapter.SpaceItemDecoration;
+import jsc.kit.adapter.decoration.SpaceItemDecoration;
 import jsc.kit.adapter.refresh.PullToRefreshRecyclerView;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

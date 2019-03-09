@@ -1,4 +1,4 @@
-package jsc.kit.adapter;
+package jsc.kit.adapter.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
