@@ -538,12 +538,12 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
         recyclerView.setAdapter(this);
     }
 
-    private void ensureBoundedRecyclerView(){
+    private void ensureBoundedRecyclerView() {
         if (recyclerView == null)
             throw new IllegalStateException("Please bind RecyclerView first by calling method bindRecyclerView(@NonNull RecyclerView recyclerView).");
     }
 
-    protected int getCustomHeaderSize(){
+    protected int getCustomHeaderSize() {
         return 0;
     }
 
@@ -733,6 +733,17 @@ public abstract class BaseHeaderFooterAdapter<H, D, F, E, VH extends BaseHeaderF
             View view = findViewById(id);
             if (view != null)
                 view.setTag(key, tag);
+            return this;
+        }
+
+        public BaseViewHolder setCompoundDrawables(@IdRes int id,
+                                                   @Nullable Drawable left,
+                                                   @Nullable Drawable top,
+                                                   @Nullable Drawable right,
+                                                   @Nullable Drawable bottom) {
+            View view = findViewById(id);
+            if (view instanceof TextView)
+                ((TextView) view).setCompoundDrawables(left, top, right, bottom);
             return this;
         }
 
