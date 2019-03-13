@@ -455,6 +455,16 @@ public <H extends IHeader> void setHeader(@NonNull H refresh)
 
 ### 4、release log
 
+#### version:0.3.7
+1、新增RecyclerView分割线[LineItemDecoration](/adapterLibrary/src/main/java/jsc/kit/adapter/decoration/LineItemDecoration.java)
+
+2、新增方法：`BaseViewHolder setCompoundDrawables(@IdRes int id,
+                                                          @Nullable Drawable left,
+                                                          @Nullable Drawable top,
+                                                          @Nullable Drawable right,
+                                                          @Nullable Drawable bottom)`
+
+
 #### version:0.3.3
 1、修复PullToRefreshRecyclerView加载完成后项目滑动bug
 
