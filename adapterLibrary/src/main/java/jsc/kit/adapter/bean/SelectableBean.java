@@ -9,14 +9,16 @@ import java.io.Serializable;
  *
  * @author jsc
  */
-public class SelectableBean implements Serializable {
+public class SelectableBean implements Serializable, ISelectable {
 
     private transient boolean selected;
 
+    @Override
     public boolean isSelected() {
         return selected;
     }
 
+    @Override
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
