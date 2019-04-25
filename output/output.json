@@ -3,16 +3,16 @@
     "outputType": {
       "type": "APK"
     },
-    "apkInfo": {
+    "apkData": {
       "type": "MAIN",
       "splits": [],
-      "versionCode": 14,
-      "versionName": "0.3.2",
+      "versionCode": 20,
+      "versionName": "0.3.8",
       "enabled": true,
       "outputFile": "SimpleAdapterDemo.apk",
       "fullName": "release",
       "baseName": "release",
-      "content": "\n1、优化PullToRefreshRecyclerView.\n2、优化BaseHeaderFooterAdapter."
+      "content": "\n1、add BaseItemAdapter."
     },
     "path": "SimpleAdapterDemo.apk",
     "properties": {}

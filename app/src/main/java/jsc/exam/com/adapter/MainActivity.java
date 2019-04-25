@@ -33,6 +33,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import jsc.exam.com.adapter.bean.ClassItem;
 import jsc.exam.com.adapter.fragments.AboutFragment;
+import jsc.exam.com.adapter.fragments.BaseItemAdapterFragment;
 import jsc.exam.com.adapter.fragments.CheckableFragment;
 import jsc.exam.com.adapter.fragments.OptionalFragment;
 import jsc.exam.com.adapter.fragments.PullToRefreshFragment;
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity {
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "PullToRefresh", PullToRefreshFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "Optional", OptionalFragment.class, false));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "Checkable", CheckableFragment.class, false));
+        classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "BaseItemAdapter", BaseItemAdapterFragment.class, true));
         classItems.add(new ClassItem(ClassItem.TYPE_FRAGMENT, "About", AboutFragment.class, false));
         return classItems;
     }
