@@ -118,40 +118,66 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     }
 
     private int state = INIT;
-    private ObjectAnimator animator = null;
-
+    //回弹动画
+    private ObjectAnimator reboundAnimator = null;
+    //下拉刷新视图
     private View refreshView;
     private RecyclerView recyclerView;
+    //上滑加载更多视图
     private View loadMoreView;
+    //下拉刷新监听（方便用户实现自定义下拉刷新动画效果）
     private IRefresh refresh = null;
+    //上滑加载更多监听（方便用户实现自定义上滑加载更多动画效果）
     private ILoadMore footer = null;
 
+    //滑动速度跟踪器
     private VelocityTracker velocityTracker;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
     private int scaledTouchSlop;
 
-    private int headerHeight;
-    private int footerHeight;
+    //下拉刷新视图之高度
+    private int refreshViewHeight;
+    //上滑加载更多视图之高度
+    private int loadMoreViewHeight;
 
+    //是否启动下拉刷新功能
     private boolean refreshEnable = true;
+    //是否启动上滑加载更多功能
     private boolean loadMoreEnable = true;
+    //分页加载时起始页码
     private int startPage = 1;
+    //分页加载时单页最大数据量
     private int pageSize = 12;
+    //分页加载时当前加载到第几页
     private int currentPage;
+    //是否有下一页待加载的数据。如果没有下一页待加载的数据，则不能继续上滑。
     private boolean haveMore;
+    //刷新、加载更多之监听
     private OnRefreshListener onRefreshListener = null;
 
+    //进入滑动模式
+    private boolean intoScrollingModel;
+    private int touchedPointerId = -1;
     private float lastTouchY = 0.0f;
 
+    //上一次刷新时间戳
     private long lastRefreshTimeStamp = 0L;
+    //提示文案："下拉刷新"
     private CharSequence pullDownToRefreshText;
+    //提示文案："释放刷新"
     private CharSequence releaseToRefreshText;
+    //提示文案："正在刷新"
     private CharSequence refreshingText;
+    //提示文案："刷新完成"
     private CharSequence refreshCompletedText;
+    //提示文案："上滑加载更多"
     private CharSequence pullUpToLoadMoreText;
+    //提示文案："释放加载更多"
     private CharSequence releaseToLoadMoreText;
+    //提示文案："正在加载"
     private CharSequence loadingMoreText;
+    //提示文案："加载更多完成"
     private CharSequence loadMoreCompletedText;
 
     public PullToRefreshRecyclerView(Context context) {
@@ -244,8 +270,8 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
-        headerHeight = refreshView.getMeasuredHeight();
-        footerHeight = loadMoreView.getMeasuredHeight();
+        refreshViewHeight = refreshView.getMeasuredHeight();
+        loadMoreViewHeight = loadMoreView.getMeasuredHeight();
     }
 
     @Override
@@ -264,25 +290,35 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         int action = ev.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                stopReboundAnim();
-                recyclerView.stopScroll();
-                lastTouchY = ev.getY();
+                if (!intoScrollingModel) {
+                    //这里使用PointerId防止多手指touch混乱问题
+                    touchedPointerId = ev.getPointerId(0);
+                    stopReboundAnim();
+                    recyclerView.stopScroll();
+                    lastTouchY = ev.getY();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                float curTouchY = ev.getY();
-                float dy = curTouchY - lastTouchY;
-                dy = dy > 0 ? dy + 0.5f : dy - 0.5f;
-                lastTouchY = curTouchY;
-                //如果滑动距离小于scaledTouchSlop，则把事件交给子View消耗；
-                //否则此事件交由自己的onTouchEvent(MotionEvent event)方法消耗。
-                if (Math.abs((int) dy) >= scaledTouchSlop / 2)
-                    return true;
+                if (!intoScrollingModel && touchedPointerId == ev.getPointerId(0)) {
+                    float curTouchY = ev.getY();
+                    float dy = curTouchY - lastTouchY;
+                    dy = dy > 0 ? dy + 0.5f : dy - 0.5f;
+                    lastTouchY = curTouchY;
+                    //如果滑动距离小于scaledTouchSlop，则把事件交给子View消耗；
+                    //否则此事件交由自己的onTouchEvent(MotionEvent event)方法消耗。
+                    if (Math.abs((int) dy) >= scaledTouchSlop / 2){
+                        intoScrollingModel = true;
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (!intoScrollingModel) {
+                    executeUpOrCancelMotionEventWithoutVelocity();
+                }
                 break;
         }
-        return super.onInterceptTouchEvent(ev);
+        return intoScrollingModel;
     }
 
     @Override
@@ -291,26 +327,33 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         int action = ev.getActionMasked();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                trackMotionEvent(ev);
-                lastTouchY = ev.getY();
+                if (touchedPointerId == ev.getPointerId(0)) {
+                    trackMotionEvent(ev);
+                    lastTouchY = ev.getY();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
-                trackMotionEvent(ev);
-                float curTouchY = ev.getY();
-                float dy = curTouchY - lastTouchY;
-                if (dy != 0) {
-                    dy = dy > 0 ? dy + 0.5f : dy - 0.5f;
-                    lastTouchY = curTouchY;
-                    executeMove((int) -dy);
+                if (touchedPointerId == ev.getPointerId(0)) {
+                    trackMotionEvent(ev);
+                    float curTouchY = ev.getY();
+                    float dy = curTouchY - lastTouchY;
+                    if (dy != 0) {
+                        dy = dy > 0 ? dy + 0.5f : dy - 0.5f;
+                        lastTouchY = curTouchY;
+                        executeMove((int) -dy);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                final VelocityTracker tracker = velocityTracker;
-                tracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                int velocity = (int) tracker.getYVelocity();
-                recycleVelocityTracker();
-                executeUpOrCancelMotionEvent(velocity);
+                if (touchedPointerId == ev.getPointerId(0)) {
+                    final VelocityTracker tracker = velocityTracker;
+                    tracker.computeCurrentVelocity(1000, mMaximumVelocity);
+                    int velocity = (int) tracker.getYVelocity();
+                    recycleVelocityTracker();
+                    executeUpOrCancelMotionEvent(velocity);
+                    intoScrollingModel = false;
+                }
                 break;
         }
         return true;
@@ -367,7 +410,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
 
         if (getScrollY() < 0) {
             if (!isRefreshEnable() || isRefreshing()) {
-                refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
+                refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), refreshViewHeight, getRefreshThresholdValue());
                 return;
             }
 
@@ -378,10 +421,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 //pull down to refresh
                 setState(PULL_DOWN_TO_REFRESH);
             }
-            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
+            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), refreshViewHeight, getRefreshThresholdValue());
         } else if (getScrollY() > 0) {
             if (!isLoadMoreEnable() || isLoadingMore() || !isHaveMore()) {
-                footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
+                footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), loadMoreViewHeight, getLoadMoreThresholdValue());
                 return;
             }
 
@@ -392,32 +435,52 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 //pull up to load more
                 setState(PULL_UP_TO_LOAD_MORE);
             }
-            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), loadMoreViewHeight, getLoadMoreThresholdValue());
         } else {
-            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), headerHeight, getRefreshThresholdValue());
-            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), footerHeight, getLoadMoreThresholdValue());
+            refresh.onScroll(getState(), isRefreshEnable(), isRefreshing(), getScrollY(), refreshViewHeight, getRefreshThresholdValue());
+            footer.onScroll(getState(), isLoadMoreEnable(), isLoadingMore(), getScrollY(), loadMoreViewHeight, getLoadMoreThresholdValue());
         }
     }
 
     private void executeUpOrCancelMotionEvent(int velocity) {
         switch (getState()) {
             case REFRESHING:
-                executeRebound(0 - headerHeight);
+                executeRebound(0 - refreshViewHeight);
                 recyclerView.fling(0, 0 - velocity);
                 break;
             case LOADING_MORE:
-                executeRebound(footerHeight);
+                executeRebound(loadMoreViewHeight);
                 recyclerView.fling(0, 0 - velocity);
                 break;
             case RELEASE_TO_REFRESH:
-                executeRebound(0 - headerHeight);
+                executeRebound(0 - refreshViewHeight);
                 break;
             case RELEASE_TO_LOAD_MORE:
-                executeRebound(isHaveMore() ? footerHeight : 0);
+                executeRebound(isHaveMore() ? loadMoreViewHeight : 0);
                 break;
             default:
                 executeRebound(0);
                 recyclerView.fling(0, 0 - velocity);
+                break;
+        }
+    }
+
+    private void executeUpOrCancelMotionEventWithoutVelocity() {
+        switch (getState()) {
+            case REFRESHING:
+                executeRebound(0 - refreshViewHeight);
+                break;
+            case LOADING_MORE:
+                executeRebound(loadMoreViewHeight);
+                break;
+            case RELEASE_TO_REFRESH:
+                executeRebound(0 - refreshViewHeight);
+                break;
+            case RELEASE_TO_LOAD_MORE:
+                executeRebound(isHaveMore() ? loadMoreViewHeight : 0);
+                break;
+            default:
+                executeRebound(0);
                 break;
         }
     }
@@ -430,10 +493,10 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         int duration = Math.abs(scrollYDistance);
         duration = Math.max(200, duration);
         duration = Math.min(500, duration);
-        if (animator == null) {
-            animator = ObjectAnimator.ofPropertyValuesHolder(this, PropertyValuesHolder.ofInt(SCROLL_Y, getScrollY(), destinationScrollY));
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.addListener(new SimpleAnimatorListener() {
+        if (reboundAnimator == null) {
+            reboundAnimator = ObjectAnimator.ofPropertyValuesHolder(this, PropertyValuesHolder.ofInt(SCROLL_Y, getScrollY(), destinationScrollY));
+            reboundAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            reboundAnimator.addListener(new SimpleAnimatorListener() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     switch (getState()) {
@@ -463,16 +526,16 @@ public class PullToRefreshRecyclerView extends ViewGroup {
                 }
             });
         } else {
-            animator.setIntValues(getScrollY(), destinationScrollY);
+            reboundAnimator.setIntValues(getScrollY(), destinationScrollY);
         }
-        animator.setDuration(duration);
-        animator.start();
+        reboundAnimator.setDuration(duration);
+        reboundAnimator.start();
     }
 
     private void stopReboundAnim() {
-        if (animator != null && animator.isRunning()) {
+        if (reboundAnimator != null && reboundAnimator.isRunning()) {
             setState(INIT);
-            animator.cancel();
+            reboundAnimator.cancel();
         }
     }
 
@@ -540,11 +603,11 @@ public class PullToRefreshRecyclerView extends ViewGroup {
     }
 
     private int getRefreshThresholdValue() {
-        return 0 - headerHeight / 2;
+        return 0 - refreshViewHeight / 2;
     }
 
     private int getLoadMoreThresholdValue() {
-        return footerHeight / 2;
+        return loadMoreViewHeight / 2;
     }
 
     private int getRecyclerViewMaxCanPullDownDistance() {
@@ -583,7 +646,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
         if (delay <= 0) {
             //refresh
             setState(RELEASE_TO_REFRESH);
-            executeRebound(0 - headerHeight);
+            executeRebound(0 - refreshViewHeight);
             return;
         }
 
@@ -592,7 +655,7 @@ public class PullToRefreshRecyclerView extends ViewGroup {
             public void run() {
                 //refresh
                 setState(RELEASE_TO_REFRESH);
-                executeRebound(0 - headerHeight);
+                executeRebound(0 - refreshViewHeight);
             }
         }, delay);
     }
