@@ -72,6 +72,10 @@ public class BaseItemAdapter<T> extends RecyclerView.Adapter<BaseItemAdapter.Bas
         recyclerView.setAdapter(this);
     }
 
+    public List<T> getItems() {
+        return items;
+    }
+
     public void setItems(List<T> items) {
         this.items.clear();
         if (items != null)
